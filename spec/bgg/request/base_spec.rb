@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Bgg::Request::Base do
+  subject { Bgg::Request::Base }
 
-  describe '#request' do
+  describe '.request' do
     it 'throws an ArgumentError when method is not known' do
       expect{ subject.request nil }.to raise_error(ArgumentError)
       expect{ subject.request '' }.to raise_error(ArgumentError)
