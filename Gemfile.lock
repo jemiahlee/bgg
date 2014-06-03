@@ -60,7 +60,6 @@ GEM
     webmock (1.8.9)
       addressable (>= 2.2.7)
       crack (>= 0.1.7)
-    xml-simple (1.1.1)
 
 PLATFORMS
   ruby
@@ -70,9 +69,9 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 0.3.0)
   httparty (~> 0.8.3)
   jeweler (~> 2.0.1)
+  nokogiri (~> 1.6.1)
   rake (~> 10.1.0)
   rdoc (~> 3.12)
   rspec (~> 2.11.0)
   simplecov (~> 0.7.1)
   webmock (~> 1.8.9)
-  xml-simple (~> 1.1.1)
