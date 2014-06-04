@@ -21,3 +21,4 @@ class BggRequest
 end
 
 require 'bgg/request/base'
+require 'bgg/request/collection'
