@@ -5,26 +5,28 @@ describe Bgg::Request::Base do
 
   describe '.request' do
 
-    it 'throws an ArgumentError when method is not known' do
-      expect{ subject.request nil }.to raise_error(ArgumentError)
-      expect{ subject.request '' }.to raise_error(ArgumentError)
-      expect{ subject.request :blah }.to raise_error(ArgumentError)
+    context 'invalid method argument' do
+      it do
+        expect{ subject.request nil }.to raise_error(ArgumentError)
+        expect{ subject.request '' }.to raise_error(ArgumentError)
+        expect{ subject.request :blah }.to raise_error(ArgumentError)
+      end
     end
 
-    describe 'makes a request' do
+    context 'valid method argument' do
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot?' }
 
-      describe 'get something other than 200 status' do
+      context 'not 200 status' do
 
         before do
           stub_request(:any, request_url).with().to_return(status:504)
         end
 
-        it { expect{ subject.request :blah }.to raise_error() }
+        it { expect{ subject.request :hot }.to raise_error() }
 
       end
 
-      describe 'valid method and 200 status' do
+      context '200 status' do
         let(:response_file) { 'sample_data/hot?type=boardgame' }
 
         before do
