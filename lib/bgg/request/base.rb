@@ -22,13 +22,11 @@ module Bgg
 
       BASE_URI = 'http://www.boardgamegeek.com/xmlapi2'
 
-      def self.request(method, *params)
+      def self.request(method, params = {})
         raise ArgumentError.new('unknown request method') unless METHODS.include? method
 
-        params ||= {}
-
         url = BASE_URI + '/' + method.to_s
-        response = self.get(url, :query => params)
+        response = self.get(url, query: params)
 
         if response.code == 200
           xml_data = response.body
