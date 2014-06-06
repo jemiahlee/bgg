@@ -6,7 +6,7 @@ module Bgg
       attr_reader :collection_id, :comment, :id, :image, :name,
                   :play_count, :thumbnail, :type, :year_published,
                   :players, :play_time, :own_count, :user_rating,
-                  :average_rating
+                  :average_rating, :bgg_rating
 
       def initialize(item)
         # Integers
@@ -21,6 +21,7 @@ module Bgg
         # Floats
         @user_rating = xpath_value_float "stats/rating/@value"
         @average_rating = xpath_value_float "stats/rating/average/@value"
+        @bgg_rating = xpath_value_float "stats/rating/bayesaverage/@value"
 
         # Range
         min_players = xpath_value_int "stats/@minplayers"

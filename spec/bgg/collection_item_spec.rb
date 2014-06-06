@@ -22,6 +22,7 @@ describe Bgg::Collection::Item do
     its(:own_count)      { should eq(nil) }
     its(:user_rating)    { should eq(nil) }
     its(:average_rating) { should eq(nil) }
+    its(:bgg_rating)     { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
@@ -48,6 +49,7 @@ describe Bgg::Collection::Item do
     let(:own_count) { 123456 }
     let(:user_rating) { 9.5 }
     let(:average_rating) { 7.63834 }
+    let(:bgg_rating) { 7.34567 }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -65,6 +67,7 @@ describe Bgg::Collection::Item do
               numowned='#{own_count}'>
             <rating value='#{user_rating}'>
               <average value='#{average_rating}'/>
+              <bayesaverage value='#{bgg_rating}'/>
             </rating>
           </stats>
           <status
@@ -93,6 +96,7 @@ describe Bgg::Collection::Item do
     its(:own_count)      { should eq(own_count) }
     its(:user_rating)    { should eq(user_rating) }
     its(:average_rating) { should eq(average_rating) }
+    its(:bgg_rating)     { should eq(bgg_rating) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 
