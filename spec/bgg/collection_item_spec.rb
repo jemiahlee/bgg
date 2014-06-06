@@ -23,6 +23,7 @@ describe Bgg::Collection::Item do
     its(:user_rating)    { should eq(nil) }
     its(:average_rating) { should eq(nil) }
     its(:bgg_rating)     { should eq(nil) }
+    its(:type_rank)      { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
