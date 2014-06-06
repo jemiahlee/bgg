@@ -11,6 +11,13 @@ module Bgg
       end
     end
 
+    def xpath_value_float(path)
+      value = xpath_value path
+      if value
+        value.to_f
+      end
+    end
+
     def xpath_value_boolean(path)
       value = xpath_value path
       if value

@@ -20,6 +20,7 @@ describe Bgg::Collection::Item do
     its(:players)        { should eq(nil) }
     its(:play_time)      { should eq(nil) }
     its(:own_count)      { should eq(nil) }
+    its(:user_rating)    { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
@@ -44,6 +45,7 @@ describe Bgg::Collection::Item do
     let(:max_players) { 4 }
     let(:play_time) { 120 }
     let(:own_count) { 123456 }
+    let(:user_rating) { 9.5 }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -58,7 +60,9 @@ describe Bgg::Collection::Item do
               minplayers='#{min_players}'
               maxplayers='#{max_players}'
               playingtime='#{play_time}'
-              numowned='#{own_count}'/>
+              numowned='#{own_count}'>
+            <rating value='#{user_rating}'/>
+          </stats>
           <status
               own='#{status}'
               prevowned='#{status}'
@@ -83,6 +87,7 @@ describe Bgg::Collection::Item do
     its(:players)        { should eq(min_players..max_players) }
     its(:play_time)      { should eq(play_time) }
     its(:own_count)      { should eq(own_count) }
+    its(:user_rating)    { should eq(user_rating) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 
