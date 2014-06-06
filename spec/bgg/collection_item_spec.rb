@@ -17,6 +17,8 @@ describe Bgg::Collection::Item do
     its(:year_published) { should eq(nil) }
     its(:image)          { should eq(nil) }
     its(:thumbnail)      { should eq(nil) }
+    its(:players)        { should eq(nil) }
+    its(:play_time)      { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
@@ -37,6 +39,9 @@ describe Bgg::Collection::Item do
     let(:year_published) { 2014 }
     let(:image) { 'hijk' }
     let(:thumbnail) { 'lmno' }
+    let(:min_players) { 2 }
+    let(:max_players) { 4 }
+    let(:play_time) { 120 }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -47,6 +52,10 @@ describe Bgg::Collection::Item do
           <yearpublished>#{year_published}</yearpublished>
           <image>#{image}</image>
           <thumbnail>#{thumbnail}</thumbnail>
+          <stats
+              minplayers='#{min_players}'
+              maxplayers='#{max_players}'
+              playingtime='#{play_time}'/>
           <status
               own='#{status}'
               prevowned='#{status}'
@@ -68,6 +77,8 @@ describe Bgg::Collection::Item do
     its(:year_published) { should eq(year_published) }
     its(:image)          { should eq(image) }
     its(:thumbnail)      { should eq(thumbnail) }
+    its(:players)        { should eq(min_players..max_players) }
+    its(:play_time)      { should eq(play_time) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 

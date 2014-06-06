@@ -4,7 +4,8 @@ module Bgg
       include Bgg::Result
 
       attr_reader :collection_id, :comment, :id, :image, :name,
-                  :play_count, :thumbnail, :type, :year_published
+                  :play_count, :thumbnail, :type, :year_published,
+                  :players, :play_time
 
       def initialize(item)
         # Integers
@@ -13,6 +14,12 @@ module Bgg
         @collection_id = xpath_value_int "@collid"
         @play_count = xpath_value_int "numplays"
         @year_published = xpath_value_int "yearpublished"
+        @play_time = xpath_value_int "stats/@playingtime"
+
+        # Range
+        min_players = xpath_value_int "stats/@minplayers"
+        max_players = xpath_value_int "stats/@maxplayers"
+        @players = (min_players and max_players) ?  min_players..max_players : nil
 
         # Strings
         @name = xpath_value "name"
