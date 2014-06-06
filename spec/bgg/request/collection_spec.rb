@@ -1,26 +1,47 @@
 require 'spec_helper'
 
 describe Bgg::Request::Collection do
-  subject { Bgg::Request::Collection }
+  let(:username) { "abcdef" }
+  let(:response_file) { "sample_data/collection?username=texasjdl" }
+  let(:request_url) { "http://www.boardgamegeek.com/xmlapi2/collection" }
+  let(:query) { { username: username } }
 
-  describe '.request' do
-    it 'throws an ArgumentError when username not present' do
-      expect{ subject.request nil }.to raise_error(ArgumentError)
-      expect{ subject.request '' }.to raise_error(ArgumentError)
+  subject { Bgg::Request::Collection.new username }
+
+  before do
+    stub_request(:any, request_url).
+      with(query: query).
+      to_return(body: File.open(response_file), status:200)
+  end
+
+  context 'throws an ArgumentError when username not present' do
+    it do
+      expect{ subject.get nil }.to raise_error ArgumentError
+      expect{ subject.get '' }.to raise_error ArgumentError
     end
+  end
 
-    describe 'makes a request if username is valid' do
-      let(:username) { "abcdef" }
-      let(:response_file) { "sample_data/collection?username=texasjdl" }
-      let(:request_url) { "http://www.boardgamegeek.com/xmlapi2/collection" }
+  describe ".board_games" do
+    let(:query) { { username: username, subtype: "boardgame", excludesubtype: "boardgameexpansion" } }
 
-      before do
-        stub_request(:any, request_url).
-          with(query: {username: username}).
-          to_return(body: File.open(response_file), status:200)
-      end
+    it { expect( Bgg::Request::Collection.board_games username ).to be_instance_of Bgg::Request::Collection }
+  end
 
-      it { expect( subject.request username ).to be_a_kind_of(Nokogiri::XML::Document) }
-    end
+  describe ".board_game_expansions" do
+    let(:query) { { username: username, subtype: "boardgameexpansion" } }
+
+    it { expect( Bgg::Request::Collection.board_game_expansions username ).to be_instance_of Bgg::Request::Collection }
+  end
+
+  describe ".rpgs" do
+    let(:query) { { username: username, subtype: "rpgitem" } }
+
+    it { expect( Bgg::Request::Collection.rpgs username ).to be_instance_of Bgg::Request::Collection }
+  end
+
+  describe ".video_games" do
+    let(:query) { { username: username, subtype: "videogame" } }
+
+    it { expect( Bgg::Request::Collection.video_games username ).to be_instance_of Bgg::Request::Collection }
   end
 end

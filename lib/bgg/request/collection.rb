@@ -10,14 +10,30 @@ module Bgg
       RPGS = { subtype: "rpgitem" }
       VIDEO_GAMES = { subtype: "videogame" }
 
-      def self.request(username, params = {})
+      def self.board_games(username, params = {})
+        Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
+      end
+
+      def self.board_game_expansions(username, params = {})
+        Bgg::Request::Collection.new username, params.merge!(BOARD_GAME_EXPANSIONS)
+      end
+
+      def self.rpgs(username, params = {})
+        Bgg::Request::Collection.new username, params.merge!(RPGS)
+      end
+
+      def self.video_games(username, params = {})
+        Bgg::Request::Collection.new username, params.merge!(VIDEO_GAMES)
+      end
+
+      def initialize(username, params = {})
         if username.nil? || username.empty?
-          raise ArgumentError.new("missing required username")
+          raise ArgumentError.new "missing required username"
         else
           params[:username] = username
         end
 
-        super(:collection, params)
+        super :collection, params
       end
 
     end

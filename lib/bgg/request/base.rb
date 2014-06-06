@@ -6,6 +6,8 @@ module Bgg
     class Base
       include HTTParty
 
+      attr_reader :params
+
       METHODS = [
         :collection,
         :family,
@@ -22,17 +24,22 @@ module Bgg
 
       BASE_URI = 'http://www.boardgamegeek.com/xmlapi2'
 
-      def self.request(method, params = {})
-        raise ArgumentError.new('unknown request method') unless METHODS.include? method
+      def initialize(method, params = {})
+        raise ArgumentError.new 'unknown request method' unless METHODS.include? method
 
-        url = BASE_URI + '/' + method.to_s
-        response = self.get(url, query: params)
+        @method = method
+        @params = params
+      end
+
+      def get
+        url = BASE_URI + '/' + @method.to_s
+        response = self.class.get url, query: @params
 
         if response.code == 200
           xml_data = response.body
-          Nokogiri.XML(xml_data)
+          Nokogiri.XML xml_data
         else
-          raise "Received a #{response.code} at #{url} with #{params}"
+          raise "Received a #{response.code} at #{url} with #{@params}"
         end
       end
 

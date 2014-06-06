@@ -6,7 +6,7 @@ describe Bgg::Collection do
   let(:request_url) { "http://www.boardgamegeek.com/xmlapi2/collection" }
   let(:query) { { username: username } }
 
-  subject { Bgg::Collection.new(username) }
+  subject { Bgg::Collection.new(Bgg::Request::Collection.new(username)) }
 
   it_behaves_like "a result"
 
@@ -27,29 +27,5 @@ describe Bgg::Collection do
 
   describe "#played" do
     it { expect( subject.played.count ).to eq 9 }
-  end
-
-  describe ".board_games" do
-    let(:query) { { username: username, subtype: "boardgame", excludesubtype: "boardgameexpansion" } }
-
-    it { expect( Bgg::Collection.board_games username ).to be_instance_of Bgg::Collection }
-  end
-
-  describe ".board_game_expansions" do
-    let(:query) { { username: username, subtype: "boardgameexpansion" } }
-
-    it { expect( Bgg::Collection.board_game_expansions username ).to be_instance_of Bgg::Collection }
-  end
-
-  describe ".rpgs" do
-    let(:query) { { username: username, subtype: "rpgitem" } }
-
-    it { expect( Bgg::Collection.rpgs username ).to be_instance_of Bgg::Collection }
-  end
-
-  describe ".video_games" do
-    let(:query) { { username: username, subtype: "videogame" } }
-
-    it { expect( Bgg::Collection.video_games username ).to be_instance_of Bgg::Collection }
   end
 end
