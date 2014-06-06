@@ -51,6 +51,7 @@ describe Bgg::Collection::Item do
     let(:user_rating) { 9.5 }
     let(:average_rating) { 7.63834 }
     let(:bgg_rating) { 7.34567 }
+    let(:type_rank) { 987 }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -69,6 +70,9 @@ describe Bgg::Collection::Item do
             <rating value='#{user_rating}'>
               <average value='#{average_rating}'/>
               <bayesaverage value='#{bgg_rating}'/>
+              <ranks>
+                <rank type='subtype' value='#{type_rank}'/>
+              </ranks>
             </rating>
           </stats>
           <status
@@ -98,6 +102,7 @@ describe Bgg::Collection::Item do
     its(:user_rating)    { should eq(user_rating) }
     its(:average_rating) { should eq(average_rating) }
     its(:bgg_rating)     { should eq(bgg_rating) }
+    its(:type_rank)      { should eq(type_rank) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 
