@@ -24,6 +24,7 @@ describe Bgg::Collection::Item do
     its(:average_rating) { should eq(nil) }
     its(:bgg_rating)     { should eq(nil) }
     its(:type_rank)      { should eq(nil) }
+    its(:theme_ranks)    { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
@@ -52,6 +53,8 @@ describe Bgg::Collection::Item do
     let(:average_rating) { 7.63834 }
     let(:bgg_rating) { 7.34567 }
     let(:type_rank) { 987 }
+    let(:theme_ranks) { [ { id: 654, title: "Family", rank: 32, rating: 7.54321 },
+                          { id: 543, title: "Name", rank: 43, rating: 7.21098 } ] }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -62,28 +65,36 @@ describe Bgg::Collection::Item do
           <yearpublished>#{year_published}</yearpublished>
           <image>#{image}</image>
           <thumbnail>#{thumbnail}</thumbnail>
-          <stats
-              minplayers='#{min_players}'
-              maxplayers='#{max_players}'
-              playingtime='#{play_time}'
-              numowned='#{own_count}'>
+          <stats minplayers='#{min_players}'
+                 maxplayers='#{max_players}'
+                 playingtime='#{play_time}'
+                 numowned='#{own_count}'>
             <rating value='#{user_rating}'>
               <average value='#{average_rating}'/>
               <bayesaverage value='#{bgg_rating}'/>
               <ranks>
                 <rank type='subtype' value='#{type_rank}'/>
+                <rank type='family'
+                      id='#{theme_ranks.first[:id]}'
+                      friendlyname='#{theme_ranks.first[:title]}'
+                      value='#{theme_ranks.first[:rank]}'
+                      bayesaverage='#{theme_ranks.first[:rating]}'/>
+                <rank type='family'
+                      id='#{theme_ranks.last[:id]}'
+                      friendlyname='#{theme_ranks.last[:title]}'
+                      value='#{theme_ranks.last[:rank]}'
+                      bayesaverage='#{theme_ranks.last[:rating]}'/>
               </ranks>
             </rating>
           </stats>
-          <status
-              own='#{status}'
-              prevowned='#{status}'
-              fortrade='#{status}'
-              want='#{status}'
-              wanttoplay='#{status}'
-              wanttobuy='#{status}'
-              wishlist='#{status}'
-              preordered='#{status}'/>
+          <status own='#{status}'
+                  prevowned='#{status}'
+                  fortrade='#{status}'
+                  want='#{status}'
+                  wanttoplay='#{status}'
+                  wanttobuy='#{status}'
+                  wishlist='#{status}'
+                  preordered='#{status}'/>
           <numplays>#{play_count}</numplays>
           <comment>#{comment}</comment>
         </item>
@@ -103,6 +114,7 @@ describe Bgg::Collection::Item do
     its(:average_rating) { should eq(average_rating) }
     its(:bgg_rating)     { should eq(bgg_rating) }
     its(:type_rank)      { should eq(type_rank) }
+    its(:theme_ranks)    { should eq(theme_ranks) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 

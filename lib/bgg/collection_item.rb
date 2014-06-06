@@ -6,7 +6,7 @@ module Bgg
       attr_reader :collection_id, :comment, :id, :image, :name,
                   :play_count, :thumbnail, :type, :year_published,
                   :players, :play_time, :own_count, :user_rating,
-                  :average_rating, :bgg_rating, :type_rank
+                  :average_rating, :bgg_rating, :type_rank, :theme_ranks
 
       def initialize(item)
         # Integers
@@ -25,9 +25,7 @@ module Bgg
         @bgg_rating = xpath_value_float "stats/rating/bayesaverage/@value"
 
         # Range
-        min_players = xpath_value_int "stats/@minplayers"
-        max_players = xpath_value_int "stats/@maxplayers"
-        @players = (min_players and max_players) ?  min_players..max_players : nil
+        @players = xpath_value_range "stats/@minplayers", "stats/@maxplayers"
 
         # Strings
         @name = xpath_value "name"
@@ -36,13 +34,16 @@ module Bgg
         @thumbnail = xpath_value "thumbnail"
         @comment = xpath_value "comment"
 
-        # booleans
+        # Booleans
         @owned = xpath_value_boolean "status/@own"
         @wanted = xpath_value_boolean "status/@want"
         @for_trade = xpath_value_boolean "status/@fortrade"
         @preordered = xpath_value_boolean "status/@preordered"
         @want_to_buy = xpath_value_boolean "status/@wanttobuy"
         @want_to_play = xpath_value_boolean "status/@wanttoplay"
+
+        # Hashes
+        @theme_ranks = xpath_value_ranks "stats/rating/ranks/rank[@type='family']"
       end
 
       def played?
@@ -80,6 +81,24 @@ module Bgg
       #def game
         #Bgg::Game.find_by_id(self.id)
       #end
+
+      private
+
+      def xpath_value_range(start_path, end_path)
+        min_players = xpath_value_int start_path
+        max_players = xpath_value_int end_path
+        (min_players and max_players) ?  min_players..max_players : nil
+      end
+
+      def xpath_value_ranks(path)
+        selected_ranks = @xml.xpath path
+        selected_ranks.map do |rank|
+          { id: xpath_value_int("@id", rank),
+            title: xpath_value("@friendlyname", rank),
+            rank: xpath_value_int("@value", rank),
+            rating: xpath_value_float("@bayesaverage", rank) }
+        end unless selected_ranks.empty?
+      end
     end
   end
 end
