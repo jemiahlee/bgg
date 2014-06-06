@@ -22,3 +22,8 @@ end
 
 require 'bgg/request/base'
 require 'bgg/request/collection'
+
+require 'bgg/result'
+
+require 'bgg/collection'
+require 'bgg/collection_item'

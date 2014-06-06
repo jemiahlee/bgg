@@ -1,35 +1,37 @@
 module Bgg
   class Collection
     class Item
+      include Bgg::Result
+
       attr_reader :collection_id, :comment, :id, :image, :name,
                   :play_count, :thumbnail, :type, :year_published
 
       def initialize(item)
         # Integers
-        @id = item['objectid'].to_i
-        @collection_id = item['collid'].to_i
-        @play_count = item['numplays'][0].to_i
+        @xml = item
+        @id = xpath_value_int "@objectid"
+        @collection_id = xpath_value_int "@collid"
+        @play_count = xpath_value_int "numplays"
+        @year_published = xpath_value_int "yearpublished"
 
-        @comment = item.fetch('comment', [])[0]
-        @image = item['image'][0]
-        @name = item['name'][0]['content']
-        @thumbnail = item['thumbnail'][0]
-        @type = item['subtype']
+        # Strings
+        @name = xpath_value "name"
+        @type = xpath_value "@subtype"
+        @image = xpath_value "image"
+        @thumbnail = xpath_value "thumbnail"
+        @comment = xpath_value "comment"
 
         # booleans
-        @owned = item['status'][0]['own'] == '1'
-        @for_trade = item['status'][0]['fortrade'] == '1'
-        @preordered = item['status'][0]['preordered'] == '1'
-        @want_to_buy = item['status'][0]['wanttobuy'] == '1'
-        @want_to_play = item['status'][0]['wanttoplay'] == '1'
-        @wanted = item['status'][0]['want'] == '1'
-
-        # special handling
-        @year_published = item.fetch('yearpublished', ['0'])[0].to_i
+        @owned = xpath_value_boolean "status/@own"
+        @wanted = xpath_value_boolean "status/@want"
+        @for_trade = xpath_value_boolean "status/@fortrade"
+        @preordered = xpath_value_boolean "status/@preordered"
+        @want_to_buy = xpath_value_boolean "status/@wanttobuy"
+        @want_to_play = xpath_value_boolean "status/@wanttoplay"
       end
 
       def played?
-        @play_count > 0
+        @play_count > 0 if @play_count
       end
 
       def wanted?
@@ -57,12 +59,12 @@ module Bgg
       end
 
       def published?
-        @year_published != 0
+        @year_published != 0 and @year_published <= Time.now.year if @year_published
       end
 
-      def game
-        Bgg::Game.find_by_id(self.id)
-      end
+      #def game
+        #Bgg::Game.find_by_id(self.id)
+      #end
     end
   end
 end

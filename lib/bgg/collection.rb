@@ -1,58 +1,49 @@
 module Bgg
   class Collection
-    def self.find_by_username(username)
-      if username =~ /^\d*$/
-        # this is a sorta hokey restriction because there is probably nothing requiring
-        # users to have non-numeric usernames. I'm not sure that I've seen one though.
-        raise ArgumentError.new('username must not be empty or only digits!')
-      end
+    include Enumerable
+    include Bgg::Result
 
-      if username.is_a?(Integer)
-        raise ArgumentError.new('username must not be an Integer!')
-      end
-
-      collection_data = BggApi.collection({username: username})
-
-      unless collection_data.has_key?('item')
-        raise ArgumentError.new('User does not exist')
-      end
-
-      Bgg::Collection.new(collection_data)
-    end
-  end
-
-  class Collection
-    def initialize(collection_data)
-      @items = []
-
-      collection_data['item'].each do |item|
-        bgg_item = Bgg::Collection::Item.new(item)
-        @items.push(bgg_item)
-      end
+    def self.board_games(username, params = {})
+      Bgg::Collection.new username, params.merge!(Bgg::Request::Collection::BOARD_GAMES)
     end
 
-    def size
-      @items.size
+    def self.board_game_expansions(username, params = {})
+      Bgg::Collection.new username, params.merge!(Bgg::Request::Collection::BOARD_GAME_EXPANSIONS)
     end
 
-    def count
-      self.size
+    def self.rpgs(username, params = {})
+      Bgg::Collection.new username, params.merge!(Bgg::Request::Collection::RPGS)
+    end
+
+    def self.video_games(username, params = {})
+      Bgg::Collection.new username, params.merge!(Bgg::Request::Collection::VIDEO_GAMES)
+    end
+
+    def initialize(username, params = {})
+      @xml = Bgg::Request::Collection.request username, params
+      @items = parse
+    end
+
+    def each &block
+      @items.each do |item|
+        block.call item
+      end
     end
 
     def owned
-      @items.select{ |item| item.owned? }
-    end
-
-    def boardgames
-      @items.select{ |item| item.type == 'boardgame' }
-    end
-
-    def boardgame_expansions
-      @items.select{ |item| item.name =~ /expansion/i }
+      @items.select { |item| item.owned? }
     end
 
     def played
       @items.select{ |item| item.played? }
+    end
+
+    private
+
+    def parse
+      @xml.xpath('items/item').map do |item|
+        Bgg::Collection::Item.new item
+      end
     end
   end
 end
