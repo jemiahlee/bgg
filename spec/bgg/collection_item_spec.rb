@@ -25,6 +25,7 @@ describe Bgg::Collection::Item do
     its(:bgg_rating)     { should eq(nil) }
     its(:type_rank)      { should eq(nil) }
     its(:theme_ranks)    { should eq(nil) }
+    its(:last_modified)  { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:comment)        { should eq(nil) }
     its(:owned?)         { should eq(nil) }
@@ -55,6 +56,7 @@ describe Bgg::Collection::Item do
     let(:type_rank) { 987 }
     let(:theme_ranks) { [ { id: 654, title: "Family", rank: 32, rating: 7.54321 },
                           { id: 543, title: "Name", rank: 43, rating: 7.21098 } ] }
+    let(:last_modified) { Time.new("2001-01-01") }
     let(:status) { 1 }
     let(:play_count) { 2 }
     let(:comment) { 'p' }
@@ -94,7 +96,8 @@ describe Bgg::Collection::Item do
                   wanttoplay='#{status}'
                   wanttobuy='#{status}'
                   wishlist='#{status}'
-                  preordered='#{status}'/>
+                  preordered='#{status}'
+                  lastmodified='#{last_modified}'/>
           <numplays>#{play_count}</numplays>
           <comment>#{comment}</comment>
         </item>
@@ -115,6 +118,7 @@ describe Bgg::Collection::Item do
     its(:bgg_rating)     { should eq(bgg_rating) }
     its(:type_rank)      { should eq(type_rank) }
     its(:theme_ranks)    { should eq(theme_ranks) }
+    its(:last_modified)  { should eq(last_modified) }
     its(:play_count)     { should eq(play_count) }
     its(:comment)        { should eq(comment) }
 

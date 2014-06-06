@@ -6,7 +6,8 @@ module Bgg
       attr_reader :collection_id, :comment, :id, :image, :name,
                   :play_count, :thumbnail, :type, :year_published,
                   :players, :play_time, :own_count, :user_rating,
-                  :average_rating, :bgg_rating, :type_rank, :theme_ranks
+                  :average_rating, :bgg_rating, :type_rank, :theme_ranks,
+                  :last_modified
 
       def initialize(item)
         # Integers
@@ -44,6 +45,9 @@ module Bgg
 
         # Hashes
         @theme_ranks = xpath_value_ranks "stats/rating/ranks/rank[@type='family']"
+
+        # Dates
+        @last_modified = xpath_value_time "status/@lastmodified"
       end
 
       def played?
@@ -88,6 +92,11 @@ module Bgg
         min_players = xpath_value_int start_path
         max_players = xpath_value_int end_path
         (min_players and max_players) ?  min_players..max_players : nil
+      end
+
+      def xpath_value_time(path)
+        time_string = xpath_value path
+        Time.new(time_string) if time_string
       end
 
       def xpath_value_ranks(path)
