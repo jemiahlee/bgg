@@ -43,6 +43,10 @@ module Bgg
         end
       end
 
+      def add_params(params)
+        @params.merge! params
+      end
+
     end
   end
 end

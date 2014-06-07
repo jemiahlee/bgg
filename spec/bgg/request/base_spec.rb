@@ -42,4 +42,10 @@ describe Bgg::Request::Base do
     its(:params) { should eq(type) }
     its(:get) { should be_a Nokogiri::XML::Document }
   end
+
+  describe '#add_params' do
+    let(:param) { { add: "param" } }
+
+    it { expect( subject.add_params param ).to eq param }
+  end
 end
