@@ -3,8 +3,9 @@ module Bgg
     include Enumerable
     include Bgg::Result
 
-    def initialize(xml)
+    def initialize(xml, request)
       @xml = xml
+      @request = request
       @items = parse
     end
 
@@ -26,7 +27,7 @@ module Bgg
 
     def parse
       @xml.xpath('items/item').map do |item|
-        Bgg::Collection::Item.new item
+        Bgg::Collection::Item.new item, @request
       end
     end
   end

@@ -1,6 +1,10 @@
 module Bgg
   module Result
-    attr_reader :xml
+    attr_reader :xml, :request
+
+    def request_params
+      @request.params
+    end
 
     private
 

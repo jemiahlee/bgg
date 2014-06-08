@@ -9,9 +9,10 @@ module Bgg
                   :average_rating, :bgg_rating, :type_rank, :theme_ranks,
                   :last_modified
 
-      def initialize(item)
+      def initialize(item, request)
         # Integers
         @xml = item
+        @request = request
         @id = xpath_value_int "@objectid"
         @collection_id = xpath_value_int "@collid"
         @play_count = xpath_value_int "numplays"

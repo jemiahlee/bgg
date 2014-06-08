@@ -8,7 +8,8 @@ describe Bgg::Collection do
       <item objectid='3'><name>3rd</name><status own='1'/><numplays>0</numplays></item>
     </items>" }
 
-  subject { Bgg::Collection.new(Nokogiri.XML xml_string) }
+  subject { Bgg::Collection.new(Nokogiri.XML(xml_string),
+                                Bgg::Request::Collection.new('username')) }
 
   it_behaves_like "a result"
 

@@ -37,7 +37,7 @@ module Bgg
 
         if response.code == 200
           xml_result = Nokogiri.XML response.body
-          Object::const_get("Bgg::#{@method.to_s.capitalize}").new xml_result
+          Object::const_get("Bgg::#{@method.to_s.capitalize}").new xml_result, self
         else
           raise "Received a #{response.code} at #{url} with #{@params}"
         end

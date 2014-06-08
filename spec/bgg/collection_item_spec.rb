@@ -5,7 +5,7 @@ describe Bgg::Collection::Item do
   let(:item_xml) { Nokogiri.XML(xml_string) }
   let(:xml_string) { "<items><item/></items>" }
 
-  subject { Bgg::Collection::Item.new(item_xml.at_xpath("items/item")) }
+  subject { Bgg::Collection::Item.new(item_xml.at_xpath("items/item"), Bgg::Request::Collection.new('username')) }
 
   it_behaves_like "a result"
 
