@@ -3,8 +3,8 @@ module Bgg
     include Enumerable
     include Bgg::Result
 
-    def initialize(request)
-      @xml = request.get
+    def initialize(xml)
+      @xml = xml
       @items = parse
     end
 

@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Bgg::Request::Base do
   let(:status_code) { 200 }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot?' }
-  let(:response_file) { 'sample_data/hot?type=boardgame' }
+  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection?' }
+  let(:response_file) { 'sample_data/collection?username=texasjdl' }
   let(:with) { {} }
 
-  subject { Bgg::Request::Base.new :hot }
+  subject { Bgg::Request::Base.new :collection }
 
   before do
     stub_request(:any, request_url).
@@ -30,17 +30,17 @@ describe Bgg::Request::Base do
 
   context 'no params' do
     its(:params) { should eq({}) }
-    its(:get) { should be_a Nokogiri::XML::Document }
+    its(:get) { should be_instance_of Bgg::Collection }
   end
 
   context 'with params' do
     let(:type) { { type: "boardgame" } }
     let(:with) { { query: type } }
 
-    subject { Bgg::Request::Base.new :hot, type }
+    subject { Bgg::Request::Base.new :collection, type }
 
     its(:params) { should eq(type) }
-    its(:get) { should be_a Nokogiri::XML::Document }
+    its(:get) { should be_instance_of Bgg::Collection }
   end
 
   describe '#add_params' do

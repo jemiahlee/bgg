@@ -25,7 +25,7 @@ describe BggRequest do
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
       let(:response_file) { 'sample_data/collection?username=texasjdl&own=1&excludesubtype=boardgameexpansion' }
 
-      subject(:results) { BggRequest.collection username, params }
+      subject { BggRequest.collection username, params }
 
       it { expect( subject ).to be_instance_of Bgg::Collection }
     end
