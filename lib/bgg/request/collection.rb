@@ -11,19 +11,23 @@ module Bgg
       VIDEO_GAMES = { subtype: "videogame" }
 
       def self.board_games(username, params = {})
-        Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
+        request = Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
+        request.get
       end
 
       def self.board_game_expansions(username, params = {})
-        Bgg::Request::Collection.new username, params.merge!(BOARD_GAME_EXPANSIONS)
+        request = Bgg::Request::Collection.new username, params.merge!(BOARD_GAME_EXPANSIONS)
+        request.get
       end
 
       def self.rpgs(username, params = {})
-        Bgg::Request::Collection.new username, params.merge!(RPGS)
+        request = Bgg::Request::Collection.new username, params.merge!(RPGS)
+        request.get
       end
 
       def self.video_games(username, params = {})
-        Bgg::Request::Collection.new username, params.merge!(VIDEO_GAMES)
+        request = Bgg::Request::Collection.new username, params.merge!(VIDEO_GAMES)
+        request.get
       end
 
       def initialize(username, params = {})

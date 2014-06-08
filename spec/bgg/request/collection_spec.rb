@@ -24,24 +24,24 @@ describe Bgg::Request::Collection do
   describe ".board_games" do
     let(:query) { { username: username, subtype: "boardgame", excludesubtype: "boardgameexpansion" } }
 
-    it { expect( Bgg::Request::Collection.board_games username ).to be_instance_of Bgg::Request::Collection }
+    it { expect( Bgg::Request::Collection.board_games username ).to be_instance_of Bgg::Collection }
   end
 
   describe ".board_game_expansions" do
     let(:query) { { username: username, subtype: "boardgameexpansion" } }
 
-    it { expect( Bgg::Request::Collection.board_game_expansions username ).to be_instance_of Bgg::Request::Collection }
+    it { expect( Bgg::Request::Collection.board_game_expansions username ).to be_instance_of Bgg::Collection }
   end
 
   describe ".rpgs" do
     let(:query) { { username: username, subtype: "rpgitem" } }
 
-    it { expect( Bgg::Request::Collection.rpgs username ).to be_instance_of Bgg::Request::Collection }
+    it { expect( Bgg::Request::Collection.rpgs username ).to be_instance_of Bgg::Collection }
   end
 
   describe ".video_games" do
     let(:query) { { username: username, subtype: "videogame" } }
 
-    it { expect( Bgg::Request::Collection.video_games username ).to be_instance_of Bgg::Request::Collection }
+    it { expect( Bgg::Request::Collection.video_games username ).to be_instance_of Bgg::Collection }
   end
 end
