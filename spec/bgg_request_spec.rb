@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe BggRequest do
-
-end
-describe 'BggApi basic API calls' do
   context 'when calling an undefined method' do
     subject { BggRequest.foo }
 
