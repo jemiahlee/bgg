@@ -19,32 +19,28 @@ describe Bgg::Collection::Item do
     its(:bgg_rating)     { should eq(nil) }
     its(:collection_id)  { should eq(nil) }
     its(:comment)        { should eq(nil) }
+    its(:for_trade?)     { should eq(nil) }
     its(:id)             { should eq(nil) }
     its(:image)          { should eq(nil) }
     its(:name)           { should eq(nil) }
     its(:last_modified)  { should eq(nil) }
     its(:own_count)      { should eq(nil) }
+    its(:owned?)         { should eq(nil) }
     its(:play_count)     { should eq(nil) }
     its(:play_time)      { should eq(nil) }
+    its(:played?)        { should eq(nil) }
     its(:players)        { should eq(nil) }
+    its(:preordered?)    { should eq(nil) }
+    its(:published?)     { should eq(nil) }
     its(:theme_ranks)    { should eq(nil) }
     its(:thumbnail)      { should eq(nil) }
     its(:type)           { should eq(nil) }
     its(:type_rank)      { should eq(nil) }
     its(:user_rating)    { should eq(nil) }
+    its(:want_to_buy?)   { should eq(nil) }
+    its(:want_to_play?)  { should eq(nil) }
+    its(:wanted?)        { should eq(nil) }
     its(:year_published) { should eq(nil) }
-
-    context 'Booleans should throw exceptions' do
-      it { expect{ subject.for_trade? }.to raise_error(TypeError) }
-      it { expect{ subject.owned? }.to raise_error(TypeError) }
-      it { expect{ subject.played? }.to raise_error(TypeError) }
-      it { expect{ subject.preordered? }.to raise_error(TypeError) }
-      it { expect{ subject.published? }.to raise_error(TypeError) }
-      it { expect{ subject.want_to_play? }.to raise_error(TypeError) }
-      it { expect{ subject.want_to_buy? }.to raise_error(TypeError) }
-      it { expect{ subject.wanted? }.to raise_error(TypeError) }
-    end
-
   end
 
   context 'with data' do
@@ -154,10 +150,10 @@ describe Bgg::Collection::Item do
       its(:comment)        { should eq(nil) }
       its(:image)          { should eq(nil) }
       its(:play_count)     { should eq(nil) }
+      its(:played?)        { should eq(nil) }
+      its(:published?)     { should eq(nil) }
       its(:thumbnail)      { should eq(nil) }
       its(:year_published) { should eq(nil) }
-      it { expect{ subject.played? }.to raise_error(TypeError) }
-      it { expect{ subject.published? }.to raise_error(TypeError) }
     end
 
     context 'brief false in request params' do

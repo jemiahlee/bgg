@@ -15,42 +15,36 @@ module Bgg
       end
 
       def for_trade?
-        raise TypeError, "Expected boolean got nil" if @for_trade.nil?
         @for_trade
       end
 
       def owned?
-        raise TypeError, "Expected boolean got nil" if @owned.nil?
         @owned
       end
 
       def played?
-        raise TypeError, "Expected boolean got nil" if @play_count.nil?
-        @play_count > 0
+        @play_count > 0 unless @play_count.nil?
       end
 
       def preordered?
-        raise TypeError, "Expected boolean got nil" if @preordered.nil?
         @preordered
       end
 
       def published?
-        raise TypeError, "Expected boolean got nil" if @year_published.nil?
-        @year_published != 0 and @year_published <= Time.now.year
+        unless @year_published.nil?
+          @year_published != 0 and @year_published <= Time.now.year
+        end
       end
 
       def wanted?
-        raise TypeError, "Expected boolean got nil" if @wanted.nil?
         @wanted
       end
 
       def want_to_buy?
-        raise TypeError, "Expected boolean got nil" if @want_to_buy.nil?
         @want_to_buy
       end
 
       def want_to_play?
-        raise TypeError, "Expected boolean got nil" if @want_to_play.nil?
         @want_to_play
       end
 
