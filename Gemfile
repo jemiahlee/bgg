@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 gem 'httparty', '~>0.8.3'
 gem 'nokogiri', '~>1.6.1'
+gem 'xml-simple', '~>1.1.1'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

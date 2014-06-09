@@ -213,26 +213,22 @@ describe Bgg::Collection::Item do
       its(:type_rank)      { should eq(nil) }
       its(:user_rating)    { should eq(nil) }
     end
+
+    describe '#game' do
+      #TODO refactor once Things have been coverted
+      let(:response_file) { 'sample_data/thing?id=70512&type=boardgame' }
+      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/thing' }
+
+      before do
+        stub_request(:any, request_url).
+          with(query: {id: 1234, type: 'boardgame'}).
+          to_return(body: File.open(response_file), status: 200)
+      end
+
+      it 'returns a Bgg::Game object corresponding to the entry' do
+        expect( subject.game ).to be_instance_of(Bgg::Game)
+      end
+    end
   end
 
-  #describe '#game' do
-    #it 'exists' do
-      #expect( item ).to respond_to(:game)
-    #end
-
-    #it 'returns a Bgg::Game object corresponding to the entry' do
-      #response_file = 'sample_data/thing?id=70512&type=boardgame'
-      #request_url = 'http://www.boardgamegeek.com/xmlapi2/thing'
-
-      #stub_request(:any, request_url).
-        #with(query: {id: 70512, type: 'boardgame'}).
-        #to_return(body: File.open(response_file), status: 200)
-
-      #game = item.game
-
-      #expect( game ).to be_instance_of(Bgg::Game)
-      #expect( game.name ).to eq('Luna')
-      #expect( game.designers ).to eq(['Stefan Feld'])
-    #end
-  #end
 end

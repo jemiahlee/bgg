@@ -9,6 +9,7 @@ if ENV['COVERAGE'] == 'yes'
 end
 
 require 'bgg_request'
+require 'bgg'
 require 'rspec'
 require 'webmock/rspec'
 

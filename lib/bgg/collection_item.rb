@@ -48,9 +48,10 @@ module Bgg
         @want_to_play
       end
 
-      #def game
-        #Bgg::Game.find_by_id(self.id)
-      #end
+      def game
+        #TODO refactor once Things have been coverted
+        Bgg::Game.find_by_id(self.id)
+      end
 
       private
 

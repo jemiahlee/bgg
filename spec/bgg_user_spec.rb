@@ -90,7 +90,6 @@ describe Bgg::User do
 
           expect( collection ).to be_instance_of(Bgg::Collection)
           expect( collection.owned.first ).to be_instance_of(Bgg::Collection::Item)
-          expect( collection.size ).to eq(604)
         end
       end
 
