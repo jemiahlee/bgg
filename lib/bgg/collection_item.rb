@@ -3,84 +3,55 @@ module Bgg
     class Item
       include Bgg::Result
 
-      attr_reader :collection_id, :comment, :id, :image, :name,
-                  :play_count, :thumbnail, :type, :year_published,
-                  :players, :play_time, :own_count, :user_rating,
-                  :average_rating, :bgg_rating, :type_rank, :theme_ranks,
-                  :last_modified
+      attr_reader :average_rating, :bgg_rating, :collection_id, :comment,
+                  :id, :image, :last_modified, :name, :own_count, :play_count,
+                  :play_time, :players, :thumbnail, :theme_ranks, :type,
+                  :type_rank, :user_rating, :year_published
 
       def initialize(item, request)
-        # Integers
         @xml = item
         @request = request
-        @id = xpath_value_int "@objectid"
-        @collection_id = xpath_value_int "@collid"
-        @play_count = xpath_value_int "numplays"
-        @year_published = xpath_value_int "yearpublished"
-        @play_time = xpath_value_int "stats/@playingtime"
-        @own_count = xpath_value_int "stats/@numowned"
-        @type_rank = xpath_value_int "stats/rating/ranks/rank[@type='subtype']/@value"
-
-        # Floats
-        @user_rating = xpath_value_float "stats/rating/@value"
-        @average_rating = xpath_value_float "stats/rating/average/@value"
-        @bgg_rating = xpath_value_float "stats/rating/bayesaverage/@value"
-
-        # Range
-        @players = xpath_value_range "stats/@minplayers", "stats/@maxplayers"
-
-        # Strings
-        @name = xpath_value "name"
-        @type = xpath_value "@subtype"
-        @image = xpath_value "image"
-        @thumbnail = xpath_value "thumbnail"
-        @comment = xpath_value "comment"
-
-        # Booleans
-        @owned = xpath_value_boolean "status/@own"
-        @wanted = xpath_value_boolean "status/@want"
-        @for_trade = xpath_value_boolean "status/@fortrade"
-        @preordered = xpath_value_boolean "status/@preordered"
-        @want_to_buy = xpath_value_boolean "status/@wanttobuy"
-        @want_to_play = xpath_value_boolean "status/@wanttoplay"
-
-        # Hashes
-        @theme_ranks = xpath_value_ranks "stats/rating/ranks/rank[@type='family']"
-
-        # Dates
-        @last_modified = xpath_value_time "status/@lastmodified"
-      end
-
-      def played?
-        @play_count > 0 if @play_count
-      end
-
-      def wanted?
-        @wanted
+        set_attributes
       end
 
       def for_trade?
+        raise TypeError, "Expected boolean got nil" if @for_trade.nil?
         @for_trade
       end
 
       def owned?
+        raise TypeError, "Expected boolean got nil" if @owned.nil?
         @owned
       end
 
-      def want_to_play?
-        @want_to_play
-      end
-
-      def want_to_buy?
-        @want_to_buy
+      def played?
+        raise TypeError, "Expected boolean got nil" if @play_count.nil?
+        @play_count > 0
       end
 
       def preordered?
+        raise TypeError, "Expected boolean got nil" if @preordered.nil?
         @preordered
       end
 
       def published?
-        @year_published != 0 and @year_published <= Time.now.year if @year_published
+        raise TypeError, "Expected boolean got nil" if @year_published.nil?
+        @year_published != 0 and @year_published <= Time.now.year
+      end
+
+      def wanted?
+        raise TypeError, "Expected boolean got nil" if @wanted.nil?
+        @wanted
+      end
+
+      def want_to_buy?
+        raise TypeError, "Expected boolean got nil" if @want_to_buy.nil?
+        @want_to_buy
+      end
+
+      def want_to_play?
+        raise TypeError, "Expected boolean got nil" if @want_to_play.nil?
+        @want_to_play
       end
 
       #def game
@@ -88,6 +59,60 @@ module Bgg
       #end
 
       private
+
+      def set_attributes
+        set_default_attributes
+        set_brief_attributes if !(request.params.has_key? :brief) || request.params[:brief] == 0
+        set_stat_attributes if request.params[:stats] && request.params[:stats] == 1
+      end
+
+      def set_default_attributes
+        # Booleans
+        @for_trade = xpath_value_boolean "status/@fortrade"
+        @owned = xpath_value_boolean "status/@own"
+        @preordered = xpath_value_boolean "status/@preordered"
+        @want_to_buy = xpath_value_boolean "status/@wanttobuy"
+        @want_to_play = xpath_value_boolean "status/@wanttoplay"
+        @wanted = xpath_value_boolean "status/@want"
+
+        # Dates
+        @last_modified = xpath_value_time "status/@lastmodified"
+
+        # Integers
+        @collection_id = xpath_value_int "@collid"
+        @id = xpath_value_int "@objectid"
+        @name = xpath_value "name"
+        @type = xpath_value "@subtype"
+      end
+
+      def set_brief_attributes
+        # Integers
+        @play_count = xpath_value_int "numplays"
+        @year_published = xpath_value_int "yearpublished"
+
+        # Strings
+        @comment = xpath_value "comment"
+        @image = xpath_value "image"
+        @thumbnail = xpath_value "thumbnail"
+      end
+
+      def set_stat_attributes
+        # Floats
+        @average_rating = xpath_value_float "stats/rating/average/@value"
+        @bgg_rating = xpath_value_float "stats/rating/bayesaverage/@value"
+        @user_rating = xpath_value_float "stats/rating/@value"
+
+        # Hashes
+        @theme_ranks = xpath_value_ranks "stats/rating/ranks/rank[@type='family']"
+
+        # Integers
+        @own_count = xpath_value_int "stats/@numowned"
+        @play_time = xpath_value_int "stats/@playingtime"
+        @type_rank = xpath_value_int "stats/rating/ranks/rank[@type='subtype']/@value"
+
+        # Range
+        @players = xpath_value_range "stats/@minplayers", "stats/@maxplayers"
+      end
 
       def xpath_value_range(start_path, end_path)
         min_players = xpath_value_int start_path

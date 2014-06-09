@@ -1,6 +1,6 @@
 module Bgg
   module Result
-    attr_reader :xml, :request
+    attr_reader :request, :xml
 
     def request_params
       @request.params
