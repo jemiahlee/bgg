@@ -60,4 +60,13 @@ describe Bgg::Request::Collection do
       it { class_method_helper }
     end
   end
+
+  describe "#all_fields" do
+    let(:query) { { username: username, version: 1, stats: 1, showprivate: 1 } }
+
+    it do
+      expect( subject.all_fields ).to be_instance_of Bgg::Request::Collection
+      expect( subject.all_fields.get ).to be_instance_of Bgg::Collection
+    end
+  end
 end

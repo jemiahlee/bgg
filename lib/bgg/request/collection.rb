@@ -37,6 +37,12 @@ module Bgg
 
         super :collection, params
       end
+
+      def all_fields
+        @params.merge!(ALL_FIELDS)
+        self
+      end
+
     end
   end
 end
