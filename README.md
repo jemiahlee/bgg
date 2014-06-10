@@ -48,7 +48,8 @@ The base object can be called to get a default set of parameters for the
 given api command.
 
 ```ruby
-my_collection = BggRequest.collection('username')
+my_collection = BggRequest.collection 'username'
+my_search = BggRequest.search 'query'
 ```
 
 Of course you can always pass along additional parameters if you hunt
@@ -56,6 +57,7 @@ them down from the api.
 
 ```ruby
 my_collection = BggRequest.collection('username', { brief: 1 })
+my_search = BggRequest.search('query', { exact: 1 })
 ```
 
 #### Predefined requests
@@ -64,6 +66,7 @@ To get the same as above.
 
 ```ruby
 my_collection = Bgg::Request::Collection.board_games('username').brief.get
+my_search = Bgg::Request::Search.board_games('query').exact.get
 ```
 
 #### The long way
@@ -82,21 +85,23 @@ common themes.
 Most results return an enumerated object.
 ```ruby
 my_collection.count
-my_collection.first
-my_collection.map { |item| item.id }
+my_search.first
+my_search.map { |item| item.id }
 ```
 The enumerable could possibly have its own set of methods.
 ```ruby
 my_collection.played
+my_search.board_games
 ```
 The objects inside the enumerable are unique to the api method.
 ```ruby
 my_collection.first.user_rating
+my_search.first.type
 ```
 XML is always available
 ```ruby
 my_collection.xml.xpath('items/item')
-my_collection.first.xml.at_xpath('@objectid')
+my_search.first.xml.at_xpath('@objectid')
 ```
 
 Contributing to bgg
