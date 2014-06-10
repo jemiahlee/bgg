@@ -11,6 +11,7 @@ module Bgg
       VIDEO_GAMES = { subtype: "videogame" }
 
       ALL_FIELDS = { showprivate: 1, stats: 1, version: 1 }
+      BRIEF = { brief: 1 }
 
       def self.board_games(username, params = {})
         Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
@@ -40,6 +41,11 @@ module Bgg
 
       def all_fields
         @params.merge!(ALL_FIELDS)
+        self
+      end
+
+      def brief
+        @params.merge!(BRIEF)
         self
       end
 

@@ -69,4 +69,13 @@ describe Bgg::Request::Collection do
       expect( subject.all_fields.get ).to be_instance_of Bgg::Collection
     end
   end
+
+  describe "#brief" do
+    let(:query) { { username: username, brief: 1 } }
+
+    it do
+      expect( subject.brief ).to be_instance_of Bgg::Request::Collection
+      expect( subject.brief.get ).to be_instance_of Bgg::Collection
+    end
+  end
 end
