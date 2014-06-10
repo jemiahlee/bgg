@@ -40,18 +40,64 @@ There are object types and subtypes for many of the APIs documented at
 Everything around a user and their game collection should work, as well
 as generalized searching for board games.
 
-### Example
+### Requesting data
+There are a few ways you can request data as outlined below.
 
-Most of the documentation right now is in the specs. I will work on
-beefing this section up shortly.
+#### Simple requests
+The base object can be called to get a default set of parameters for the
+given api command.
 
 ```ruby
-texasjdl = Bgg::User.find_by_id(39488)
-texasjdl.collection.played.each do |item|
-  puts "#{item.name} is #{item.owned? ? '' : 'not'} owned."
-end
+my_collection = BggResult.collection('username')
 ```
 
+Of course you can always pass along additional parameters if you hunt
+them down from the api.
+
+```ruby
+my_collection = BggResult.collection('username', { brief: 1 })
+```
+
+#### Predefined requests
+These are here to make it so you do not need to know the bgg xml api.
+To get the same as above.
+
+```ruby
+my_collection = Bgg::Request::Collection.board_games('username').brief.get
+```
+
+#### The long way
+If you would like to pass around the request objects, this is a longer method to do so.
+
+```ruby
+my_request = Bgg::Request::Collection.new('username')
+my_filtered_request = my_request.add_params({ rated: 1 })
+my_collection = my_filtered_request.brief.get
+```
+
+### Working with results
+Each api method has it's own data structure, although there is some
+common themes.
+
+Most results return an enumerated object.
+```ruby
+my_collection.count
+my_collection.first
+my_collection.each { |item| item.id }
+```
+The enumerable could possibly have its own set of methods.
+```ruby
+my_collection.played
+```
+The objects inside the enumerable are unique to the api method.
+```ruby
+my_collection.first.user_rating
+```
+XML is always available
+```ruby
+my_collection.xml.xpath('items/item')
+my_collection.first.xml.at_xpath('@objectid')
+```
 
 Contributing to bgg
 -----------------------
@@ -69,5 +115,5 @@ Contributing to bgg
 Copyright
 ---------
 
-Copyright (c) 2014 [Jeremiah Lee](https://github.com/jemiahlee), [Brett Hardin](http://bretthard.in), and [Marcello Missiroli](https://github.com/piffy). See LICENSE.txt for further details.
+Copyright (c) 2014 [Kevin Craine](https://github.com/craineum), [Jeremiah Lee](https://github.com/jemiahlee), [Brett Hardin](http://bretthard.in), and [Marcello Missiroli](https://github.com/piffy). See LICENSE.txt for further details.
 
