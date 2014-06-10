@@ -16,8 +16,8 @@ describe Bgg::Request::Collection do
 
   context 'throws an ArgumentError when username not present' do
     it do
-      expect{ subject.get nil }.to raise_error ArgumentError
-      expect{ subject.get '' }.to raise_error ArgumentError
+      expect{ Bgg::Request::Collection.new nil }.to raise_error ArgumentError
+      expect{ Bgg::Request::Collection.new '' }.to raise_error ArgumentError
     end
   end
 
