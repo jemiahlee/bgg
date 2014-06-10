@@ -48,14 +48,14 @@ The base object can be called to get a default set of parameters for the
 given api command.
 
 ```ruby
-my_collection = BggResult.collection('username')
+my_collection = BggRequest.collection('username')
 ```
 
 Of course you can always pass along additional parameters if you hunt
 them down from the api.
 
 ```ruby
-my_collection = BggResult.collection('username', { brief: 1 })
+my_collection = BggRequest.collection('username', { brief: 1 })
 ```
 
 #### Predefined requests
@@ -71,8 +71,8 @@ If you would like to pass around the request objects, this is a longer method to
 
 ```ruby
 my_request = Bgg::Request::Collection.new('username')
-my_filtered_request = my_request.add_params({ rated: 1 })
-my_collection = my_filtered_request.brief.get
+my_request.add_params({ rated: 1 })
+my_collection = my_request.brief.get
 ```
 
 ### Working with results
@@ -83,7 +83,7 @@ Most results return an enumerated object.
 ```ruby
 my_collection.count
 my_collection.first
-my_collection.each { |item| item.id }
+my_collection.map { |item| item.id }
 ```
 The enumerable could possibly have its own set of methods.
 ```ruby
