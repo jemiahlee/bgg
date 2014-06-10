@@ -40,7 +40,7 @@ describe Bgg::Collection do
 
   describe "#user_rated" do
     let(:item1_data) { "<stats><rating value='5'/></stats>" }
-    let(:item2_data) { "<stats><rating value='8'/></stats>" }
+    let(:item2_data) { "<stats><rating value='8.1'/></stats>" }
     let(:item3) { "<item objectid='3'><stats><rating value='N/A'/></stats></item>" }
 
     before do
@@ -49,7 +49,7 @@ describe Bgg::Collection do
 
     it do
       expect( subject.user_rated.count ).to eq 2
-      expect( subject.user_rated(5).count ).to eq 1
+      expect( subject.user_rated(8).count ).to eq 1
       expect( subject.user_rated(5..8).count ).to eq 2
       expect( subject.user_rated(1..4).count ).to eq 0
     end
