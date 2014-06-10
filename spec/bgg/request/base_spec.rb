@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Bgg::Request::Base do
   let(:status_code) { 200 }
   let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection?' }
-  let(:response_file) { 'sample_data/collection?username=texasjdl' }
+  let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
   let(:with) { {} }
 
   subject { Bgg::Request::Base.new :collection }
@@ -11,7 +11,7 @@ describe Bgg::Request::Base do
   before do
     stub_request(:any, request_url).
       with(with).
-      to_return(body: File.open(response_file), status:status_code)
+      to_return(body: response_body, status:status_code)
   end
 
   context 'invalid method argument' do
