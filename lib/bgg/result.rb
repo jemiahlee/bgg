@@ -11,14 +11,14 @@ module Bgg
     def xpath_value_int(path, xml = @xml)
       value = xpath_value path, xml
       if value
-        value.to_i
+        Integer(value) rescue nil
       end
     end
 
     def xpath_value_float(path, xml = @xml)
       value = xpath_value path, xml
       if value
-        value.to_f
+        Float(value) rescue nil
       end
     end
 
