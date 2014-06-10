@@ -23,6 +23,18 @@ module Bgg
       @items.select{ |item| item.played? }
     end
 
+    def user_rated(value = nil)
+      @items.select do |item|
+        if value.kind_of? Range
+          value.include? item.user_rating
+        elsif value.kind_of? Integer
+          item.user_rating == value
+        elsif value.nil?
+          !item.user_rating.nil?
+        end
+      end
+    end
+
     private
 
     def parse
