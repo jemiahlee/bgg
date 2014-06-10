@@ -10,24 +10,34 @@ describe BggRequest do
   end
 
   context 'with stubbed responses' do
-    let(:expected_response) { File.open(response_file) }
+    let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
 
     before do
       stub_request(:any, request_url)
-        .with(query: query)
-        .to_return(body: expected_response, status: 200)
+        .with(query: with)
+        .to_return(body: response_body, status: 200)
     end
 
     describe 'BGG Collection' do
       let(:username) { 'texasjdl' }
       let(:params) { {own: '1', type: 'boardgame'} }
-      let(:query) { params.merge({ username: username }) }
+      let(:with) { params.merge({ username: username }) }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
-      let(:response_file) { 'sample_data/collection?username=texasjdl&own=1&excludesubtype=boardgameexpansion' }
 
       subject { BggRequest.collection username, params }
 
       it { expect( subject ).to be_instance_of Bgg::Collection }
+    end
+
+    describe 'BGG Search' do
+      let(:query) { 'Marvel' }
+      let(:params) { { query: query } }
+      let(:with) { params }
+      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
+
+      subject { BggRequest.search query, params }
+
+      it { expect( subject ).to be_instance_of Bgg::Search }
     end
   end
 end
