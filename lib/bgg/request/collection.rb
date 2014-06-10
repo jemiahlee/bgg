@@ -10,24 +10,22 @@ module Bgg
       RPGS = { subtype: "rpgitem" }
       VIDEO_GAMES = { subtype: "videogame" }
 
+      ALL_FIELDS = { showprivate: 1, stats: 1, version: 1 }
+
       def self.board_games(username, params = {})
-        request = Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
-        request.get
+        Bgg::Request::Collection.new username, params.merge!(BOARD_GAMES)
       end
 
       def self.board_game_expansions(username, params = {})
-        request = Bgg::Request::Collection.new username, params.merge!(BOARD_GAME_EXPANSIONS)
-        request.get
+        Bgg::Request::Collection.new username, params.merge!(BOARD_GAME_EXPANSIONS)
       end
 
       def self.rpgs(username, params = {})
-        request = Bgg::Request::Collection.new username, params.merge!(RPGS)
-        request.get
+        Bgg::Request::Collection.new username, params.merge!(RPGS)
       end
 
       def self.video_games(username, params = {})
-        request = Bgg::Request::Collection.new username, params.merge!(VIDEO_GAMES)
-        request.get
+        Bgg::Request::Collection.new username, params.merge!(VIDEO_GAMES)
       end
 
       def initialize(username, params = {})
@@ -39,7 +37,6 @@ module Bgg
 
         super :collection, params
       end
-
     end
   end
 end

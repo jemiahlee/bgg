@@ -21,27 +21,43 @@ describe Bgg::Request::Collection do
     end
   end
 
-  describe ".board_games" do
-    let(:query) { { username: username, subtype: "boardgame", excludesubtype: "boardgameexpansion" } }
+  context 'class methods' do
 
-    it { expect( Bgg::Request::Collection.board_games username ).to be_instance_of Bgg::Collection }
-  end
+    def class_method_helper
+      expect( subject ).to be_instance_of Bgg::Request::Collection
+      expect( subject.get ).to be_instance_of Bgg::Collection
+    end
 
-  describe ".board_game_expansions" do
-    let(:query) { { username: username, subtype: "boardgameexpansion" } }
+    describe ".board_games" do
+      let(:query) { { username: username, subtype: "boardgame", excludesubtype: "boardgameexpansion" } }
 
-    it { expect( Bgg::Request::Collection.board_game_expansions username ).to be_instance_of Bgg::Collection }
-  end
+      subject { Bgg::Request::Collection.board_games username }
 
-  describe ".rpgs" do
-    let(:query) { { username: username, subtype: "rpgitem" } }
+      it { class_method_helper }
+    end
 
-    it { expect( Bgg::Request::Collection.rpgs username ).to be_instance_of Bgg::Collection }
-  end
+    describe ".board_game_expansions" do
+      let(:query) { { username: username, subtype: "boardgameexpansion" } }
 
-  describe ".video_games" do
-    let(:query) { { username: username, subtype: "videogame" } }
+      subject { Bgg::Request::Collection.board_game_expansions username }
 
-    it { expect( Bgg::Request::Collection.video_games username ).to be_instance_of Bgg::Collection }
+      it { class_method_helper }
+    end
+
+    describe ".rpgs" do
+      let(:query) { { username: username, subtype: "rpgitem" } }
+
+      subject { Bgg::Request::Collection.rpgs username }
+
+      it { class_method_helper }
+    end
+
+    describe ".video_games" do
+      let(:query) { { username: username, subtype: "videogame" } }
+
+      subject { Bgg::Request::Collection.video_games username }
+
+      it { class_method_helper }
+    end
   end
 end
