@@ -30,5 +30,7 @@ require 'bgg/result'
 
 require 'bgg/collection'
 require 'bgg/collection_item'
+require 'bgg/hot'
+require 'bgg/hot_item'
 require 'bgg/search'
 require 'bgg/search_item'
