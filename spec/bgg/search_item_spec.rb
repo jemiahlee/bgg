@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Bgg::Search::Item do
   let(:item_xml) { Nokogiri.XML(xml_string) }
   let(:xml_string) { "<items><item/></items>" }
-  let(:request) { double('bgg_reqest_collection') }
+  let(:request) { double('bgg_reqest_search') }
 
   subject { Bgg::Search::Item.new(item_xml.at_xpath("items/item"), request) }
 
