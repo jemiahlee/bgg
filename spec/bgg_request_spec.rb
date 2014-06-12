@@ -29,6 +29,15 @@ describe BggRequest do
       it { expect( subject ).to be_instance_of Bgg::Collection }
     end
 
+    describe 'BGG Hot' do
+      let(:with) { {} }
+      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot' }
+
+      subject { BggRequest.hot }
+
+      it { expect( subject ).to be_instance_of Bgg::Hot }
+    end
+
     describe 'BGG Search' do
       let(:query) { 'Marvel' }
       let(:params) { { query: query } }
