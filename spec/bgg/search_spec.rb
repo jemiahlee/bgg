@@ -19,12 +19,7 @@ describe Bgg::Search do
     request.stub(:params).and_return( { query: 'query' } )
   end
 
-  it_behaves_like "a result"
-
-  describe "enumerable" do
-    its(:count) { should eq 2 }
-    its(:first) { should be_a Bgg::Search::Item }
-  end
+  it_behaves_like "a result container"
 
   describe "types" do
     describe "#board_games" do

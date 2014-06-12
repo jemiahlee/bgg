@@ -28,6 +28,7 @@ require 'bgg/request/hot'
 require 'bgg/request/search'
 
 require 'bgg/result'
+require 'bgg/result_container'
 
 require 'bgg/collection'
 require 'bgg/collection_item'

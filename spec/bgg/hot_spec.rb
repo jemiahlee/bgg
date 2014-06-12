@@ -10,12 +10,7 @@ describe Bgg::Hot do
     request.stub(:params).and_return( params )
   end
 
-  it_behaves_like "a result"
-
-  describe "enumerable" do
-    its(:count) { should eq 2 }
-    its(:first) { should be_a Bgg::Hot::Item }
-  end
+  it_behaves_like "a result container"
 
   context 'with no type request param set' do
     its(:type) { should eq 'boardgame' }

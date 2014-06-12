@@ -1,19 +1,6 @@
 module Bgg
   class Search
-    include Enumerable
-    include Bgg::Result
-
-    def initialize(xml, request)
-      @xml = xml
-      @request = request
-      @items = parse
-    end
-
-    def each &block
-      @items.each do |item|
-        block.call item
-      end
-    end
+    include Bgg::Result::Container
 
     def board_games
       @items.select{ |item| item.type == 'boardgame' }
@@ -41,14 +28,6 @@ module Bgg
 
     def video_games
       @items.select{ |item| item.type == 'videogame' }
-    end
-
-    private
-
-    def parse
-      @xml.xpath('items/item').map do |item|
-        Bgg::Search::Item.new item, @request
-      end
     end
   end
 end

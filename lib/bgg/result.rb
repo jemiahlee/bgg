@@ -1,6 +1,12 @@
 module Bgg
   module Result
+
     attr_reader :request, :xml
+
+    def initialize(xml, request)
+      @xml = xml
+      @request = request
+    end
 
     def request_params
       @request.params

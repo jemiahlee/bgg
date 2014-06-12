@@ -17,12 +17,7 @@ describe Bgg::Collection do
     request.stub(:params).and_return( { username: 'username' } )
   end
 
-  it_behaves_like "a result"
-
-  describe "enumerable" do
-    its(:count) { should eq 2 }
-    its(:first) { should be_instance_of Bgg::Collection::Item }
-  end
+  it_behaves_like "a result container"
 
   describe "#owned" do
     let(:item1_data) { "<status own='1'/>" }
