@@ -7,14 +7,11 @@ class BggApi
   include HTTParty
 
   METHODS = [
-    :collection,
     :family,
     :forum,
     :forumlist,
     :guild,
-    :hot,
     :plays,
-    :search,
     :thing,
     :thread,
     :user,
@@ -47,4 +44,3 @@ require 'bgg/play'
 require 'bgg/plays'
 require 'bgg/plays_iterator'
 require 'bgg/user'
-

@@ -32,20 +32,6 @@ describe 'BggApi basic API calls' do
       end
     end
 
-    describe 'BGG Hot Items' do
-      let(:query) { {type: 'boardgame'} }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot' }
-      let(:response_file) { 'sample_data/hot?type=boardgame' }
-
-      subject(:results) { BggApi.hot(query) }
-
-      it { should_not be_nil }
-
-      it 'retrieves the correct rank' do
-        results['item'][0]['rank'].should == '1'
-      end
-    end
-
     describe 'BGG Plays' do
       let(:query) { {id: '84876', username: 'texasjdl'} }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
