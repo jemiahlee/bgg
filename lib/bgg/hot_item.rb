@@ -6,8 +6,7 @@ module Bgg
       attr_reader :id, :name, :rank, :thumbnail, :type, :year_published
 
       def initialize(item, request)
-        @xml = item
-        @request = request
+        super item, request
         @type = request_params[:type] || 'boardgame'
 
         @id = xpath_value_int "@id"

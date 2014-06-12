@@ -9,8 +9,7 @@ module Bgg
                   :type_rank, :user_rating, :year_published
 
       def initialize(item, request)
-        @xml = item
-        @request = request
+        super item, request
         set_attributes
       end
 
