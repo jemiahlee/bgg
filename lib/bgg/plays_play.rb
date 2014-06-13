@@ -1,6 +1,6 @@
 module Bgg
 	class Plays
-    class Item
+    class Play
       include Bgg::Result::Container
 
       attr_reader :comment, :date, :id, :length, :location, :name, 
@@ -46,7 +46,7 @@ module Bgg
         #TODO refactor once Things have been coverted
         Bgg::Game.find_by_id(self.id)
       end
-      
+
       private
 
       def parse

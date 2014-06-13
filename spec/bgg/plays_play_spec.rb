@@ -1,13 +1,13 @@
 # encoding: UTF-8
 require 'spec_helper'
 
-describe Bgg::Plays::Item do
+describe Bgg::Plays::Play do
   let(:item_xml) { Nokogiri.XML(xml_string) }
   let(:params) { {} }
   let(:request) { double('bgg_reqest_play') }
   let(:xml_string) { "<plays><play/></plays>" }
 
-  subject { Bgg::Plays::Item.new(item_xml.at_xpath("plays/play"), request) }
+  subject { Bgg::Plays::Play.new(item_xml.at_xpath("plays/play"), request) }
 
   before do
     request.stub(:params).and_return( params )
@@ -28,10 +28,10 @@ describe Bgg::Plays::Item do
     its(:types)          { should eq nil }
     its(:winner)         { should eq nil }
 
-    describe Bgg::Plays::Item::Player do
+    describe Bgg::Plays::Play::Player do
       let(:xml_string) { "<plays><play><players><player/></players></play></plays>" }
 
-      subject { Bgg::Plays::Item::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
+      subject { Bgg::Plays::Play::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
 
       its(:color)          { should eq nil }
       its(:id)             { should eq nil }
@@ -116,17 +116,17 @@ describe Bgg::Plays::Item do
       its(:winner)         { should eq 'B' }
     end
 
-    describe Bgg::Plays::Item::Player do
-      let(:players) { "<player username='a' 
+    describe Bgg::Plays::Play::Player do
+      let(:players) { "<player username='a'
                                userid='1234'
-                               name='A' 
+                               name='A'
                                startposition='x'
                                color='y'
                                score='100'
                                new='1'
                                rating='5.5'
                                win='0'/>" }
-      subject { Bgg::Plays::Item::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
+      subject { Bgg::Plays::Play::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
 
       its(:color)          { should eq 'y' }
       its(:id)             { should eq 1234 }
