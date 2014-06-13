@@ -17,9 +17,9 @@ module Bgg
 
       private
 
-      def parse
-        @xml.xpath('items/item').map do |item|
-          self.class::Item.new item, @request
+      def parse(path = 'items/item', item_class = self.class::Item)
+        @xml.xpath(path).map do |item|
+          item_class.new item, @request
         end
       end
     end

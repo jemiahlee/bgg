@@ -28,10 +28,10 @@ describe Bgg::Plays::Item do
     its(:types)          { should eq nil }
     its(:winner)         { should eq nil }
 
-    describe Bgg::Plays::Item::Item do
+    describe Bgg::Plays::Item::Player do
       let(:xml_string) { "<plays><play><players><player/></players></play></plays>" }
 
-      subject { Bgg::Plays::Item::Item.new(item_xml.at_xpath("plays/play/players/player"), request) }
+      subject { Bgg::Plays::Item::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
 
       its(:color)          { should eq nil }
       its(:id)             { should eq nil }
@@ -93,12 +93,16 @@ describe Bgg::Plays::Item do
     context 'no winner' do
       let(:players) { "<player username='a' name='A' win='0'/>" }
 
+      it { expect( subject.first ).to be_instance_of subject.class::Player }
+      its(:count) { should eq 1 }
       it { expect( subject.players.count ).to eq 1 }
       its(:winner)         { should eq nil }
     end
     context 'winner with username' do
       let(:players) { "<player username='a' name='A' win='1'/>" }
 
+      it { expect( subject.first ).to be_instance_of subject.class::Player }
+      its(:count) { should eq 1 }
       it { expect( subject.players.count ).to eq 1 }
       its(:winner)         { should eq 'a' }
     end
@@ -106,13 +110,13 @@ describe Bgg::Plays::Item do
       let(:players) { "<player username='' name='A' win='0'/>
                        <player username='' name='B' win='1'/>"}
 
-      it_behaves_like "a result container"
-
+      it { expect( subject.first ).to be_instance_of subject.class::Player }
+      its(:count) { should eq 2 }
       it { expect( subject.players.count ).to eq 2 }
       its(:winner)         { should eq 'B' }
     end
 
-    describe Bgg::Plays::Item::Item do
+    describe Bgg::Plays::Item::Player do
       let(:players) { "<player username='a' 
                                userid='1234'
                                name='A' 
@@ -122,7 +126,7 @@ describe Bgg::Plays::Item do
                                new='1'
                                rating='5.5'
                                win='0'/>" }
-      subject { Bgg::Plays::Item::Item.new(item_xml.at_xpath("plays/play/players/player"), request) }
+      subject { Bgg::Plays::Item::Player.new(item_xml.at_xpath("plays/play/players/player"), request) }
 
       its(:color)          { should eq 'y' }
       its(:id)             { should eq 1234 }

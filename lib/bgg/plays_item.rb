@@ -19,16 +19,6 @@ module Bgg
         @now_in_stats = xpath_value_boolean "@nowinstats"
         @quantity     = xpath_value_int "@quantity"
         @types        = xpath_values "item/subtypes/subtype/@value"
-        #@players      = (array of objects?) = "
-        #@winner       = (string) = players/player[@win=1]/@username || @name"
-
-
-        #@players = []
-        #if play.has_key?('players')
-          #play['players'][0]['player'].each do |player|
-            #@players << Player.new(player)
-          #end
-        #end
       end
 
       def type
@@ -60,12 +50,10 @@ module Bgg
       private
 
       def parse
-        @xml.xpath('players/player').map do |item|
-          self.class::Item.new item, @request
-        end
+        super 'players/player', self.class::Player
       end
 
-      class Item
+      class Player
         include Bgg::Result
 
         attr_reader :color, :id, :name, :rating, :score, :start_position, :username
