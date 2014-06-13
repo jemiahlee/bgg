@@ -35,8 +35,25 @@ module Bgg
       end
     end
 
+    def xpath_value_date(path, xml = @xml)
+      value = xpath_value path, xml
+      if value
+        Date.strptime value, '%F'
+      end
+    end
+
     def xpath_value(path, xml = @xml)
-      node = xml.at_xpath(path)
+      node_value xml.at_xpath path
+    end
+
+    def xpath_values(path, xml = @xml)
+      nodes = xml.xpath path
+      nodes.map do |node|
+        node_value node
+      end unless nodes.empty?
+    end
+
+    def node_value(node)
       if node.instance_of? Nokogiri::XML::Attr
         node.value
       elsif node.instance_of? Nokogiri::XML::Element
