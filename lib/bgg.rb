@@ -41,5 +41,4 @@ end
 require 'bgg_request'
 require 'bgg/game'
 require 'bgg/plays'
-require 'bgg/plays_iterator'
 require 'bgg/user'
