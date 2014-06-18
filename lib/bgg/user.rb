@@ -54,7 +54,7 @@ module Bgg
     end
 
     def plays
-      Bgg::Plays.find_by_username(self.name)
+      BggRequest.plays(self.name, nil)
     end
   end
 end

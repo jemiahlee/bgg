@@ -23,7 +23,7 @@ describe Bgg::Plays do
   end
 
   context 'without data' do
-    its(:page)           { should eq nil }
+    its(:page)           { should eq 1 }
     its(:thing_id)       { should eq nil }
     its(:total_count)    { should eq nil }
     its(:username)       { should eq nil }

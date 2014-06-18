@@ -6,7 +6,7 @@ module Bgg
     def initialize(item, request)
       super item, request
 
-      @page         = request_params[:page]
+      @page         = request_params[:page] || 1
       @thing_id     = request_params[:id]
       @total_count  = xpath_value_int "plays/@total"
       @username     = request_params[:username]
