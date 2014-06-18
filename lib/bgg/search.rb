@@ -1,34 +1,33 @@
 module Bgg
   class Search
-    def self.query(search_string)
-      do_the_search(search_string)
+    include Bgg::Result::Container
+
+    def board_games
+      @items.select{ |item| item.type == 'boardgame' }
     end
 
-    def self.exact_query(search_string)
-      results = do_the_search(search_string, true)
-      results[0]
+    def board_game_expansions
+      @items.select{ |item| item.type == 'boardgameexpansion' }
     end
 
-    private
+    def rpg_issues
+      @items.select{ |item| item.type == 'rpgissue' }
+    end
 
-    def self.do_the_search(search_string, exact=false)
-      unless search_string.is_a?(String) and search_string.length > 0
-        raise ArgumentError.new('search string must be a non-empty string!')
-      end
+    def rpg_items
+      @items.select{ |item| item.type == 'rpgitem' }
+    end
 
-      if exact
-        search_results = BggApi.search({query: search_string, exact: 1})
-      else
-        search_results = BggApi.search({query: search_string})
-      end
+    def rpg_periodicals
+      @items.select{ |item| item.type == 'rpgperiodical' }
+    end
 
-      unless search_results.fetch('item', false)
-        return []
-      end
+    def rpgs
+      @items.select{ |item| item.type == 'rpg' }
+    end
 
-      search_results['item'].map{ |result|
-        Bgg::Search::Result.new(result)
-      }
+    def video_games
+      @items.select{ |item| item.type == 'videogame' }
     end
   end
 end

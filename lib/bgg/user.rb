@@ -50,11 +50,11 @@ module Bgg
     end
 
     def collection
-      Bgg::Collection.find_by_username(self.name)
+      BggRequest.collection(self.name)
     end
 
     def plays
-      Bgg::Plays.find_by_username(self.name)
+      BggRequest.plays(self.name, nil)
     end
   end
 end

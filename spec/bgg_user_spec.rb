@@ -84,30 +84,26 @@ describe Bgg::User do
         it 'returns the collection object representing the collection for the user' do
           stub_request(:any, 'http://www.boardgamegeek.com/xmlapi2/collection').
             with(query: {username: 'texasjdl'}).
-            to_return(body: File.open('sample_data/collection?username=texasjdl'), status: 200)
+            to_return(body: '<?xml version="1.0" encoding="utf-8"?><items><item/><items>', status: 200)
 
           collection = texasjdl.collection
 
           expect( collection ).to be_instance_of(Bgg::Collection)
-          expect( collection.owned.first ).to be_instance_of(Bgg::Collection::Item)
-          expect( collection.size ).to eq(604)
         end
       end
 
       describe '.plays' do
         it 'returns a Bgg::PlaysIterator' do
-          [1,2,3].each do |i|
-            stub_request(:any, 'http://www.boardgamegeek.com/xmlapi2/plays').
-              with(query: {username: 'texasjdl', page: i}).
-              to_return(body: File.open("sample_data/plays?username=texasjdl&page=#{i}"), status: 200)
-          end
+          stub_request(:any, 'http://www.boardgamegeek.com/xmlapi2/plays').
+            with(query: {username: 'texasjdl'}).
+            to_return(body: File.open("sample_data/plays?username=texasjdl&page=1"), status: 200)
 
           plays = texasjdl.plays
           first_play = plays.first
 
-          expect( plays ).to be_an_instance_of(Bgg::Plays::Iterator)
-          expect( first_play ).to be_an_instance_of(Bgg::Play)
-          expect( first_play.game_name ).to eq('Fauna')
+          expect( plays ).to be_instance_of(Bgg::Plays)
+          expect( first_play ).to be_instance_of(Bgg::Plays::Play)
+          expect( first_play.name ).to eq('Fauna')
           expect( first_play.players.size ).to eq(5)
           expect( first_play.players.first.name ).to eq('Ted')
         end

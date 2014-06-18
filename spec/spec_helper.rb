@@ -1,14 +1,19 @@
-require 'codeclimate-test-reporter'
+if ENV['CODECLIMATE_REPO_TOKEN']
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+end
 
-CodeClimate::TestReporter.start
 if ENV['COVERAGE'] == 'yes'
   require 'simplecov'
   SimpleCov.start
 end
 
+require 'bgg_request'
 require 'bgg'
 require 'rspec'
 require 'webmock/rspec'
+
+Dir["./spec/support/**/*.rb"].each {|f| require f}
 
 WebMock.disable_net_connect!(:allow => 'codeclimate.com')
 
