@@ -1,13 +1,10 @@
 require 'httparty'
 require 'xmlsimple'
 
-# http://boardgamegeek.com/wiki/page/BGG_XML_API2#
-
 class BggApi
   include HTTParty
 
   OLD_METHODS = [
-    :collection,
     :family,
     :forum,
     :forumlist,
@@ -20,6 +17,7 @@ class BggApi
   ].freeze
 
   NEW_METHODS = [
+    :collection,
     :search
   ].freeze
 
@@ -51,21 +49,19 @@ end
 
 
 require 'bgg/request/base'
-require 'bgg/request/search'
 require 'bgg/request/collection'
+require 'bgg/request/search'
 
 require 'bgg/result/item'
 require 'bgg/result/enumerable'
-require 'bgg/result/search'
-require 'bgg/result/search_item'
 require 'bgg/result/collection'
 require 'bgg/result/collection_item'
 require 'bgg/result/collection_item_rank'
+require 'bgg/result/search'
+require 'bgg/result/search_item'
 
-require 'bgg/collection'
 require 'bgg/game'
 require 'bgg/play'
 require 'bgg/plays'
 require 'bgg/plays_iterator'
 require 'bgg/user'
-
