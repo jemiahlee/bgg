@@ -1,72 +1,56 @@
-# encoding: UTF-8
 require 'spec_helper'
 
-describe Bgg::Search::Result do
-  describe 'instance' do
-    let(:item_data) { {'type'=>'boardgame',
-                       'id'=>'84876',
-                       'name'=>[{'type'=>'primary', 'value'=>'The Castles of Burgundy'}],
-                       'yearpublished'=>[{'value'=>'2011'}]} }
-    let(:search_result) { Bgg::Search::Result.new(item_data) }
+describe Bgg::Result::Search::Item do
+  let(:item_xml) { Nokogiri.XML(xml_string) }
+  let(:xml_string) { "<items><item/></items>" }
+  let(:request) { double('Bgg::Request::Search') }
 
-    describe '.id' do
-      it 'exists' do
-        expect( search_result ).to respond_to(:id)
-      end
+  subject { Bgg::Result::Search::Item.new(item_xml.at_xpath("items/item"), request) }
 
-      it 'returns correct value' do
-        expect( search_result.id ).to eq(84876)
-      end
-    end
+  before do
+    request.stub(:params).and_return( {} )
+  end
 
-    describe '.name' do
-      it 'exists' do
-        expect( search_result ).to respond_to(:name)
-      end
+  it { expect( subject ).to be_a Bgg::Result::Item }
 
-      it 'returns the correct value' do
-        expect( search_result.name ).to eq('The Castles of Burgundy')
-      end
-    end
+  context 'without data' do
+    its(:id)             { should eq(nil) }
+    its(:name)           { should eq(nil) }
+    its(:type)           { should eq(nil) }
+    its(:year_published) { should eq(nil) }
+  end
 
-    describe '.type' do
-      it 'exists' do
-        expect( search_result ).to respond_to(:type)
-      end
+  context 'with data' do
+    let(:id)             { 1234 }
+    let(:name)           { 'abc' }
+    let(:type)           { 'def' }
+    let(:year_published) { 2014 }
+    let(:xml_string) { "
+      <items>
+        <item type='#{type}' id='#{id}'>
+          <name value='#{name}'/>
+          <yearpublished value='#{year_published}'/>
+        </item>
+      </items>" }
 
-      it 'returns boardgame when it is a boardgame' do
-        expect( search_result.type ).to eq('boardgame')
-      end
-    end
+    its(:id)             { should eq(id) }
+    its(:name)           { should eq(name) }
+    its(:type)           { should eq(type) }
+    its(:year_published) { should eq(year_published) }
 
-    describe '.year_published' do
-      it 'exists' do
-        expect( search_result ).to respond_to(:year_published)
-      end
+    describe '#game' do
+      #TODO refactor once Things have been coverted
+      let(:response_file) { 'sample_data/thing?id=70512&type=boardgame' }
+      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/thing' }
 
-      it 'returns the year it was published' do
-        expect( search_result.year_published ).to eq(2011)
-      end
-    end
-
-    describe '.game' do
-      it 'exists' do
-        expect( search_result ).to respond_to(:game)
+      before do
+        stub_request(:any, request_url).
+          with(query: {id: 1234, type: 'boardgame'}).
+          to_return(body: File.open(response_file), status: 200)
       end
 
       it 'returns a Bgg::Game object corresponding to the entry' do
-        response_file = 'sample_data/thing?id=84876&type=boardgame'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/thing'
-
-        stub_request(:any, request_url).
-          with(query: {id: 84876, type: 'boardgame'}).
-          to_return(body: File.open(response_file), status: 200)
-
-        game = search_result.game
-
-        expect( game ).to be_instance_of(Bgg::Game)
-        expect( game.name ).to eq('The Castles of Burgundy')
-        expect( game.designers ).to eq(['Stefan Feld'])
+        expect( subject.game ).to be_instance_of(Bgg::Game)
       end
     end
   end

@@ -46,6 +46,8 @@ require 'bgg/request/base'
 require 'bgg/result/item'
 require 'bgg/result/enumerable'
 
+require 'bgg/result/search_item'
+
 require 'bgg/collection'
 require 'bgg/collection_item'
 require 'bgg/game'
@@ -53,6 +55,5 @@ require 'bgg/play'
 require 'bgg/plays'
 require 'bgg/plays_iterator'
 require 'bgg/search'
-require 'bgg/search_result'
 require 'bgg/user'
 
