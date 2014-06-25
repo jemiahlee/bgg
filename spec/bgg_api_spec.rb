@@ -37,16 +37,6 @@ describe 'BggApi basic API calls' do
         .to_return(body: expected_response, status: 200)
     end
 
-    describe 'BGG Search' do
-      let(:query) { {query: 'Burgund', type: 'boardgame'} }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
-      let(:response_file) { 'sample_data/search?query=Burgund&type=boardgame' }
-
-      subject(:results) { BggApi.search(query) }
-
-      it { should_not be_nil }
-    end
-
     describe 'BGG Thing' do
       let(:query) { {id: '84876', type: 'boardgame'} }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/thing' }
@@ -101,6 +91,18 @@ describe 'BggApi basic API calls' do
       it 'retrieves the correct total' do
         results['total'].should == '27'
       end
+    end
+
+    describe 'BGG Search' do
+      let(:search) { 'Marvel' }
+      let(:params) { { query: search } }
+      let(:query) { params }
+      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
+      let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
+
+      subject { BggApi.search search }
+
+      it { expect( subject ).to be_instance_of Bgg::Result::Search }
     end
 
     describe 'BGG User' do
