@@ -1,84 +1,74 @@
-# encoding: UTF-8
 require 'spec_helper'
 
-describe Bgg::Search do
-  describe 'class method' do
-    describe 'query' do
-      it 'throws an ArgumentError when an empty string is passed in' do
-        expect{ Bgg::Search.query('') }.to raise_error(ArgumentError)
-      end
+describe Bgg::Result::Search do
+  let(:item1_data) { nil }
+  let(:item1_type) { 'boardgame' }
+  let(:item2_data) { nil }
+  let(:item2_type) { 'rpgitem' }
+  let(:item3) { nil }
+  let(:request) { double('Bgg::Request::Search') }
+  let(:xml_string) { "
+    <items>
+      <item type='#{item1_type}' id='1'>#{item1_data}</item>
+      <item type='#{item2_type}' id='2'>#{item2_data}</item>
+      #{item3}
+    </items>" }
+  subject { Bgg::Result::Search.new(Nokogiri.XML(xml_string), request) }
 
-      it 'throws an ArgumentError when a non-string is passed in' do
-        expect{ Bgg::Search.query(Object.new) }.to raise_error(ArgumentError)
-      end
+  before do
+    request.stub(:params).and_return( { query: 'query' } )
+  end
 
-      it 'returns an empty array when a search has no results' do
-        response_file = 'sample_data/search?query=yyyyyyy'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/search'
+  it { expect( subject ).to be_a Bgg::Result::Enumerable }
 
-        stub_request(:any, request_url).
-          with(query: {query: 'yyyyyyy'}).
-          to_return(body: File.open(response_file), status: 200)
+  describe "types" do
+    describe "#board_games" do
+      let(:item1_type) { "boardgame" }
+      let(:item2_type) { "bogus" }
 
-        search_results = Bgg::Search.query('yyyyyyy')
-
-        expect( search_results      ).to be_instance_of(Array)
-        expect( search_results.size ).to eq(0)
-      end
-
-      it 'creates an object for a collection that exists' do
-        response_file = 'sample_data/search?query=Burgun'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/search'
-
-        stub_request(:any, request_url).
-          with(query: {query: 'Burgun'}).
-          to_return(body: File.open(response_file), status: 200)
-
-        search_results = Bgg::Search.query('Burgun')
-
-        expect( search_results      ).to be_instance_of(Array)
-        expect( search_results.size ).to eq(11)
-
-        expect( search_results.first      ).to be_instance_of(Bgg::Search::Result)
-        expect( search_results.first.name ).to eq('The Castles of Burgundy')
-      end
+      it { expect( subject.board_games.count ).to eq 1 }
     end
 
-    describe 'exact_query' do
-      it 'throws an ArgumentError when an empty string is passed in' do
-        expect{ Bgg::Search.exact_query('') }.to raise_error(ArgumentError)
-      end
+    describe "#board_game_expansions" do
+      let(:item1_type) { "boardgameexpansion" }
+      let(:item2_type) { "bogus" }
 
-      it 'throws an ArgumentError when a non-string is passed in' do
-        expect{ Bgg::Search.exact_query(Object.new) }.to raise_error(ArgumentError)
-      end
+      it { expect( subject.board_game_expansions.count ).to eq 1 }
+    end
 
-      it 'returns nil when a search has no results' do
-        response_file = 'sample_data/search?query=Burgun&exact=1'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/search'
+    describe "#rpg_issues" do
+      let(:item1_type) { "rpgissue" }
+      let(:item2_type) { "bogus" }
 
-        stub_request(:any, request_url).
-          with(query: {query: 'Burgun', exact: 1}).
-          to_return(body: File.open(response_file), status: 200)
+      it { expect( subject.rpg_issues.count ).to eq 1 }
+    end
 
-        search_results = Bgg::Search.exact_query('Burgun')
+    describe "#rpg_items" do
+      let(:item1_type) { "rpgitem" }
+      let(:item2_type) { "bogus" }
 
-        expect( search_results ).to eq(nil)
-      end
+      it { expect( subject.rpg_items.count ).to eq 1 }
+    end
 
-      it 'returns a single result for a result that exists' do
-        response_file = 'sample_data/search?query=The+Castles+of+Burgundy&exact=1'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/search'
+    describe "#rpg_periodicals" do
+      let(:item1_type) { "rpgperiodical" }
+      let(:item2_type) { "bogus" }
 
-        stub_request(:any, request_url).
-          with(query: {query: 'The Castles of Burgundy', exact: 1}).
-          to_return(body: File.open(response_file), status: 200)
+      it { expect( subject.rpg_periodicals.count ).to eq 1 }
+    end
 
-        search_result = Bgg::Search.exact_query('The Castles of Burgundy')
+    describe "#rpgs" do
+      let(:item1_type) { "rpg" }
+      let(:item2_type) { "bogus" }
 
-        expect( search_result      ).to be_instance_of(Bgg::Search::Result)
-        expect( search_result.name ).to eq('The Castles of Burgundy')
-      end
+      it { expect( subject.rpgs.count ).to eq 1 }
+    end
+
+    describe "#video_games" do
+      let(:item1_type) { "videogame" }
+      let(:item2_type) { "bogus" }
+
+      it { expect( subject.video_games.count ).to eq 1 }
     end
   end
 end
