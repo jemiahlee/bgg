@@ -10,7 +10,7 @@ describe 'BggApi basic API calls' do
   end
 
   context 'when non-200 responses' do
-    let(:expected_response) { File.open(response_file) }
+    let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
     let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
     let(:response_file) { 'sample_data/search?query=Burgund&type=boardgame' }
 
