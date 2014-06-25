@@ -43,6 +43,8 @@ end
 
 require 'bgg/request/base'
 
+require 'bgg/request/search'
+
 require 'bgg/result/item'
 require 'bgg/result/enumerable'
 
