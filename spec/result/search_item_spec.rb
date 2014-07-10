@@ -14,10 +14,10 @@ describe Bgg::Result::Search::Item do
   it { expect( subject ).to be_a Bgg::Result::Item }
 
   context 'without data' do
-    its(:id)             { should eq(nil) }
-    its(:name)           { should eq(nil) }
-    its(:type)           { should eq(nil) }
-    its(:year_published) { should eq(nil) }
+    its(:id)             { should eq nil }
+    its(:name)           { should eq nil }
+    its(:type)           { should eq nil }
+    its(:year_published) { should eq nil }
   end
 
   context 'with data' do
@@ -33,10 +33,10 @@ describe Bgg::Result::Search::Item do
         </item>
       </items>" }
 
-    its(:id)             { should eq(id) }
-    its(:name)           { should eq(name) }
-    its(:type)           { should eq(type) }
-    its(:year_published) { should eq(year_published) }
+    its(:id)             { should eq id }
+    its(:name)           { should eq name }
+    its(:type)           { should eq type }
+    its(:year_published) { should eq year_published }
 
     describe '#game' do
       #TODO refactor once Things have been coverted
@@ -53,5 +53,15 @@ describe Bgg::Result::Search::Item do
         expect( subject.game ).to be_instance_of(Bgg::Game)
       end
     end
+  end
+
+  context 'with live data' do
+    let(:response_file)  { "sample_data/search.xml" }
+    let(:xml_string)     { File.open(response_file) }
+
+    its(:id)             { should_not eq nil }
+    its(:name)           { should_not eq nil }
+    its(:type)           { should_not eq nil }
+    its(:year_published) { should_not eq nil }
   end
 end
