@@ -169,6 +169,39 @@ These might return nil if missing data or request params.  See [Working with Res
   * Integers: id (ID of theme), rank
   * String: title (Title of theme)
 
+### Hot
+
+Objects for hot items
+
+#### Bgg::Request::Hot
+
+```ruby
+request = Bgg::Request::Hot.board_game_companies
+request = Bgg::Request::Hot.board_game_people
+request = Bgg::Request::Hot.board_games
+request = Bgg::Request::Hot.rpg_companies
+request = Bgg::Request::Hot.rpg_people
+request = Bgg::Request::Hot.rpgs
+request = Bgg::Request::Hot.video_game_companies
+request = Bgg::Request::Hot.video_games
+request = Bgg::Request::Hot.new( { type: 'boardgamecompany' } ) # Instead of using built in method
+request = Bgg::Request::Hot.new # Defaults to board games
+result = request.get # Execute bgg call and return result
+```
+
+#### Bgg::Result::Hot
+
+* Attributes
+  * Strings: type
+
+#### Bgg::Result::Hot::Item
+
+* Attributes
+  * Integers: id, rank, year_published
+  * Stings: name, thumbnail, type
+* Methods
+  * game - request game based on id
+
 ### Search
 
 Objects for search
@@ -176,8 +209,8 @@ Objects for search
 #### Bgg::Request::Search
 
 ```ruby
-request = Bgg::Request::Search.board_games('query', { params: hash })
 request = Bgg::Request::Search.board_game_expansions('query', { params: hash })
+request = Bgg::Request::Search.board_games('query', { params: hash })
 request = Bgg::Request::Search.rpg_issues('query', { params: hash })
 request = Bgg::Request::Search.rpg_items('query', { params: hash })
 request = Bgg::Request::Search.rpg_periodicals('query', { params: hash })
@@ -199,7 +232,7 @@ result = request.get # Execute bgg call and return result
   * Integers: id, year_published
   * Stings: name, type
 * Methods
-  * game, request game based on id
+  * game - request game based on id
 
 
 Contributing to bgg
