@@ -56,7 +56,7 @@ describe 'BggApi basic API calls' do
       let(:params) { {own: '1', type: 'boardgame'} }
       let(:query) { params.merge({ username: username }) }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
-      let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
+      let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/></items>' }
 
       subject { BggApi.collection username, params }
 
@@ -66,15 +66,11 @@ describe 'BggApi basic API calls' do
     describe 'BGG Hot Items' do
       let(:query) { {type: 'boardgame'} }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot' }
-      let(:response_file) { 'sample_data/hot?type=boardgame' }
+      let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/></items>' }
 
-      subject(:results) { BggApi.hot(query) }
+      subject { BggApi.hot query }
 
-      it { should_not be_nil }
-
-      it 'retrieves the correct rank' do
-        results['item'][0]['rank'].should == '1'
-      end
+      it { expect( subject ).to be_instance_of Bgg::Result::Hot }
     end
 
     describe 'BGG Plays' do
