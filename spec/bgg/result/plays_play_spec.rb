@@ -2,14 +2,13 @@ require 'spec_helper'
 
 describe Bgg::Result::Plays::Play do
   let(:item_xml) { Nokogiri.XML(xml_string) }
-  let(:params) { {} }
   let(:request) { double('bgg_reqest_play') }
   let(:xml_string) { '<plays><play/></plays>' }
 
   subject { Bgg::Result::Plays::Play.new(item_xml.at_xpath('plays/play'), request) }
 
   before do
-    request.stub(:params).and_return(params)
+    request.stub(:params).and_return( {} )
   end
 
   context 'without data' do
@@ -159,10 +158,6 @@ describe Bgg::Result::Plays::Play do
   context 'with live data' do
     let(:response_file)  { "sample_data/plays.xml" }
     let(:xml_string)     { File.open(response_file) }
-
-    before do
-      request.stub(:params).and_return( { stats: 1 } )
-    end
 
     its(:comment)        { should_not eq nil }
     its(:date)           { should_not eq nil }
