@@ -1,64 +1,84 @@
 module Bgg
-	class Play
-		attr_reader :date, :game_id, :game_name, :game_type,
-			:id, :length, :location, :players, :quantity
+  module Result
+    class Plays
+      class Play < Enumerable
 
-		def initialize(play)
-			@id = play['id'].to_i
-			@incomplete = play['incomplete'].to_i
-			@game_id = play['item'][0]['objectid'].to_i
-			@length = play['length'].to_i
-			@nowinstats = play['nowinstats'].to_i
-			@quantity = play['quantity'].to_i
+        attr_reader :comment, :date, :id, :length, :location, :name, 
+                    :quantity, :type, :types, :winner
 
-			@game_name = play['item'][0]['name']
-			@game_type = play['item'][0]['subtypes'][0]['subtype'][0]['value']
+        def initialize(item, request)
+          super item, request
 
-			@date = play['date']
-			@location = play['location']
+          @comment      = xpath_value 'comments'
+          @date         = xpath_value_date '@date'
+          @id           = xpath_value_int 'item/@objectid'
+          @incomplete   = xpath_value_boolean '@incomplete'
+          @length       = xpath_value_int '@length'
+          @location     = xpath_value '@location'
+          @name         = xpath_value 'item/@name'
+          @now_in_stats = xpath_value_boolean '@nowinstats'
+          @quantity     = xpath_value_int '@quantity'
+          @types        = xpath_values 'item/subtypes/subtype/@value'
+        end
 
-			@players = []
-			if play.has_key?('players')
-				play['players'][0]['player'].each do |player|
-					@players << Player.new(player)
-				end
-			end
-		end
+        def type
+          @types.first unless @types.nil?
+        end
 
-		def nowinstats?
-			@nowinstats != 0
-		end
+        def now_in_stats?
+          @now_in_stats unless @now_in_stats.nil?
+        end
 
-		def incomplete?
-			@incomplete != 0
-		end
+        def incomplete?
+          @incomplete unless @incomplete.nil?
+        end
 
-		def game
-			Bgg::Game.find_by_id(self.game_id)
-		end
+        def players
+          @items unless @items.empty?
+        end
 
-		class Player
-			attr_reader :color, :name, :rating, :score, :start_position, :user_id, :username
+        def winner
+          found = @items.detect { |item| item.winner? }
+          found.username.empty? ? found.name : found.username unless found.nil?
+        end
 
-			def initialize(player)
-				@color = player['color']
-				@name = player['name']
-				@new = player['new'] == '1'
-				@rating = player['rating']
-				@score = player['score']
-				@start_position = player['startposition']
-				@user_id = player['userid']
-				@username = player['username']
-				@winner = player['win'] == '1'
-			end
+        def game
+          #TODO refactor once Things have been coverted
+          Bgg::Game.find_by_id(self.id)
+        end
 
-			def new?
-				@new
-			end
+        private
 
-			def winner?
-				@winner
-			end
-		end
-	end
+        def parse
+          super 'players/player', self.class::Player
+        end
+
+        class Player < Item
+
+          attr_reader :color, :id, :name, :rating, :score, :start_position, :username
+
+          def initialize(xml, request)
+            super xml, request
+            @color = xpath_value '@color'
+            @id = xpath_value_int '@userid'
+            @name = xpath_value '@name'
+            @new = xpath_value_boolean '@new'
+            @rating = xpath_value_float '@rating'
+            @score = xpath_value_int '@score'
+            @start_position = xpath_value '@startposition'
+            @username = xpath_value '@username'
+            @winner = xpath_value_boolean '@win'
+          end
+
+          def new?
+            @new unless @new.nil?
+          end
+
+          def winner?
+            @winner unless @winner.nil?
+          end
+        end
+      end
+    end
+  end
 end
