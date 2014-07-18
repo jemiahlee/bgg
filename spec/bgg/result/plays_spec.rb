@@ -1,156 +1,129 @@
-# encoding: UTF-8
 require 'spec_helper'
 
-describe Bgg::Plays::Iterator do
-  describe 'instance' do
-    let(:username) { 'texasjdl' }
-    let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
-    let(:query) { {username: username, page: 1} }
-    let(:response_file) { "sample_data/plays?username=#{username}&page=1" }
-    let(:iterator) { Bgg::Plays::Iterator.new(username) }
+describe Bgg::Result::Plays do
+  let(:params) { {} }
+  let(:play1) { '<play/>' }
+  let(:play2) { '<play/>' }
+  let(:request) { double('Bgg::Request::Plays') }
+  let(:xml_string) { "<plays>
+                        #{play1}
+                        #{play2}
+                      </plays>" }
+  subject { Bgg::Result::Plays.new(Nokogiri.XML(xml_string), request) }
 
-    before do
-      stub_request(:any, request_url).
-        with(query: query).
-        to_return(body: File.open(response_file), status: 200)
-    end
+  before do
+    request.stub(:params).and_return(params)
+  end
 
-    it 'is Enumerable' do
-      expect( iterator ).to be_a_kind_of(Enumerable)
-    end
+  context 'a result container' do
+    it { expect( subject ).to respond_to :request, :xml }
+    its(:request_params) { should be_a Hash }
+    its(:count) { should eq 2 }
+    it { expect( subject.first ).to be_instance_of subject.class::Play }
+  end
 
-    context 'when the user has no plays' do
-      let(:username) { 'beetss' }
-      it 'returns an empty iterator' do
-        expect( iterator.empty? ).to eq(true)
+  context 'without data' do
+    its(:page)           { should eq 1 }
+    its(:thing_id)       { should eq nil }
+    its(:total_count)    { should eq nil }
+    its(:username)       { should eq nil }
+
+    it { expect( subject.find_by_date Time.now ).to eq [] }
+    it { expect( subject.find_by_location 'location' ).to eq [] }
+    it { expect( subject.find_by_thing_id 1234 ).to eq [] }
+    it { expect( subject.find_by_thing_name 'name' ).to eq [] }
+
+    its(:board_game_expansions)      { should eq [] }
+    its(:board_game_implementations) { should eq [] }
+    its(:board_games)                { should eq [] }
+    its(:rpg_items)                  { should eq [] }
+    its(:video_games)                { should eq [] }
+  end
+
+  context 'with data' do
+    let(:page) { 2 }
+    let(:thing_id) { 5678 }
+    let(:total_count) { 101 }
+    let(:username) { 'my_user' }
+    let(:params) { { id: thing_id, 
+                     username: username,
+                     page: page } }
+    let(:xml_string) { "<plays total='#{total_count}'>
+                          #{play1}
+                          #{play2}
+                        </plays>" }
+
+    its(:page)           { should eq page }
+    its(:thing_id)       { should eq thing_id }
+    its(:total_count)    { should eq total_count }
+    its(:username)       { should eq username }
+
+    describe '#find_by_date' do
+      let(:date1) { Date.new(2000, 1, 1) }
+      let(:date2) { Date.new(2001, 1, 1) }
+      let(:play1) { "<play date='#{date1.to_s}'/>" }
+      let(:play2) { "<play date='#{date2.to_s}'/>" }
+
+      it do
+        expect( subject.find_by_date(date1).count ).to eq 1
+        expect( subject.find_by_date(date1..date2).count ).to eq 2
       end
     end
 
-    context 'when the user does not exist' do
-      let(:username) { 'yyyyyyy' }
-      it 'returns an empty iterator' do
-        expect{ iterator }.to raise_error(ArgumentError, 'user does not exist')
-      end
+    describe '#find_by_location' do
+      let(:play1) { "<play location='my location'/>" }
+      let(:play2) { "<play location='no location'/>" }
+
+      it { expect( subject.find_by_location('my location').count ).to eq 1 }
     end
 
-    context 'when the user exists and has plays' do
-      it 'returns an instance' do
-        expect( iterator ).to be_instance_of(Bgg::Plays::Iterator)
-      end
+    describe '#find_by_thing_id' do
+      let(:play1) { "<play><item objectid='1234'/></play>" }
+      let(:play2) { "<play><item objectid='9876'/></play>" }
+
+      it { expect( subject.find_by_thing_id(1234).count ).to eq 1 }
     end
 
-    describe '.each' do
-      it 'exists' do
-        expect( iterator ).to respond_to(:each)
-      end
+    describe '#find_by_thing_name' do
+      let(:play1) { "<play><item name='my name'/></play>" }
+      let(:play2) { "<play><item name='no name'/></play>" }
 
-      it 'allows stepping through results' do
-        iterator.each do |item|
-          expect( item ).to be_instance_of(Bgg::Play)
-          break if iterator.iteration == 3
-        end
-      end
-
-      it 'only allows stepping through the results once' do
-        iterator.each { break if iterator.iteration == 2 }
-        iterator.each { fail }
-      end
-
-      it 'returns multiple pages of results' do
-        [2,3].each do |i|
-          stub_request(:any, request_url).
-            with(query: {username: username, page: i}).
-            to_return(body: File.open("sample_data/plays?username=#{username}&page=#{i}"),
-                      status: 200)
-        end
-
-        iterator.each { }
-        expect( iterator.iteration ).to eq(299)
-      end
+      it { expect( subject.find_by_thing_name('my name').count ).to eq 1 }
     end
 
-    describe '.iteration' do
-      it 'exists' do
-        expect( iterator ).to respond_to(:iteration)
-      end
+    context 'find by types' do
+      let(:play1) { "<play><item><subtypes>
+                       <subtype value='boardgameexpansion'/>
+                       <subtype value='boardgameimplementation'/>
+                       <subtype value='boardgame'/>
+                       <subtype value='rpgitem'/>
+                       <subtype value='videogame'/>
+                     </subtype></items></play>" }
+      let(:play2) { "<play><item><subtypes><subtype value='no'/></subtype></items></play>" }
 
-      it 'returns the maximum value when the iterator is exhausted' do
-        count = 0
-        iterator.each do |item|
-          count += 1
-          expect( iterator.iteration ).to eq(count)
-          break if iterator.iteration == 3
-        end
-      end
-
-      it 'returns the current iteration through the block' do
-        count = 0
-        iterator.each do |item|
-          count += 1
-          expect( iterator.iteration ).to eq(count)
-          break if iterator.iteration == 3
-        end
-      end
-
-      context 'when the iterator starts empty,' do
-        let(:username) { 'beetss' }
-        it 'returns 0' do
-          expect( iterator.iteration ).to eq(0)
-        end
-      end
+      its(:board_game_expansions) { should have(1).item }
+      its(:board_game_implementations) { should have(1).item }
+      its(:board_games) { should have(1).item }
+      its(:rpg_items) { should have(1).item }
+      its(:video_games) { should have(1).item }
     end
+  end
 
-    describe '.empty?' do
-      it 'exists' do
-        expect( iterator ).to respond_to(:empty?)
-      end
+  context 'with live data' do
+    let(:response_file)  { 'sample_data/plays.xml' }
+    let(:xml_string)     { File.open(response_file) }
+    let(:params) { { id: '121', username: 'craineum' } }
 
-      context 'when the iterator has no results' do
-        let(:username) { 'beetss' }
-        it 'returns true' do
-          expect( iterator.empty? ).to eq(true)
-        end
-      end
+    its(:page)           { should_not eq nil }
+    its(:thing_id)       { should_not eq nil }
+    its(:total_count)    { should_not eq nil }
+    its(:username)       { should_not eq nil }
 
-      context 'when the iterator has results' do
-        it 'returns false' do
-          expect( iterator.empty? ).to eq(false)
-        end
-      end
+    it { expect( subject.find_by_date Date.parse('09-06-2012') ).to_not eq [] }
+    it { expect( subject.find_by_location 'Home, Portsmouth, NH' ).to_not eq [] }
+    it { expect( subject.find_by_thing_id 121 ).to_not eq [] }
+    it { expect( subject.find_by_thing_name 'Dune' ).to_not eq [] }
 
-      context 'when the iterator has paged through results' do
-        it 'returns true if each() has already reached the end' do
-          [2,3].each do |i|
-            stub_request(:any, request_url).
-              with(query: {username: username, page: i}).
-              to_return(body: File.open("sample_data/plays?username=#{username}&page=#{i}"),
-                        status: 200)
-          end
-
-          iterator.each{ }
-          expect( iterator.empty? ).to eq(true)
-        end
-      end
-    end
-
-    describe '.total_count' do
-      it 'exists' do
-        expect( iterator ).to respond_to(:total_count)
-      end
-
-      context 'when the user has no plays' do
-        let(:username) { 'beetss' }
-        it 'returns 0' do
-          expect( iterator.total_count ).to eq(0)
-        end
-      end
-
-      context 'when the user has plays' do
-        let(:username) { 'texasjdl' }
-        it 'returns the correct count' do
-          expect( iterator.total_count ).to eq(299)
-        end
-      end
-    end
+    its(:board_games)    { should_not eq [] }
   end
 end

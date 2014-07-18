@@ -1,63 +1,65 @@
 module Bgg
-  class Plays
-    class Iterator
-      include Enumerable
+  module Result
+    class Plays < Enumerable
+      attr_reader :page, :thing_id, :total_count, :username
 
-      attr_reader :total_count, :iteration
+      def initialize(item, request)
+        super item, request
 
-      def initialize(username)
-        @iteration = 0
-        @page = 1
-        @empty = false
-        @total_count = 0
-        @username = username
+        @page         = request_params[:page] || 1
+        @thing_id     = request_params[:id]
+        @total_count  = xpath_value_int 'plays/@total'
+        @username     = request_params[:username]
+      end
 
-        begin
-          raw_data = BggApi.plays({username: @username, page: @page})
-          @total_count = raw_data.fetch('total', '0').to_i
-          @items = raw_data['play']
-          @empty = true if @total_count == 0
-        rescue REXML::ParseException
-          # this will happen if the user does not exist
-          raise ArgumentError.new('user does not exist')
+      def find_by_date(date)
+        if date.kind_of? Range
+          select { |play| date.cover? play.date }
+        else
+          select { |play| play.date === date }
         end
       end
 
-      def each &block
-        return if empty?
-
-        while @page <= total_pages
-          @items.each do |item|
-            @iteration += 1
-            yield Bgg::Play.new(item)
-            return if @iteration == total_count
-          end
-
-          fetch_next_page
-        end
-
-      ensure
-        @empty = true
+      def find_by_location(location)
+        select { |play| play.location == location }
       end
 
-      def empty?
-        @empty
+      def find_by_thing_id(id)
+        select { |play| play.id == id }
+      end
+
+      def find_by_thing_name(name)
+        select { |play| play.name == name }
+      end
+
+      def board_game_expansions
+        find_by_type 'boardgameexpansion'
+      end
+
+      def board_game_implementations
+        find_by_type 'boardgameimplementation'
+      end
+
+      def board_games
+        find_by_type 'boardgame'
+      end
+
+      def rpg_items
+        find_by_type 'rpgitem'
+      end
+
+      def video_games
+        find_by_type 'videogame'
       end
 
       private
 
-      def fetch_page(page)
-        raw_data = BggApi.plays({username: @username, page: page})
-        @items = raw_data['play']
+      def parse
+        super 'plays/play', self.class::Play
       end
 
-      def fetch_next_page
-        fetch_page(@page + 1)
-        @page = @page + 1
-      end
-
-      def total_pages
-        (total_count / 100.0).ceil.to_i
+      def find_by_type type
+        select{ |play| play.types and play.types.include? type }
       end
     end
   end
