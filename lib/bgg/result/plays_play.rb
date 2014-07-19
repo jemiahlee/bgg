@@ -3,8 +3,8 @@ module Bgg
     class Plays
       class Play < Enumerable
 
-        attr_reader :comment, :date, :id, :length, :location, :name, 
-                    :quantity, :type, :types, :winner
+        attr_reader :comment, :date, :id, :length, :location, :name,
+                    :quantity, :type, :types
 
         def initialize(item, request)
           super item, request
