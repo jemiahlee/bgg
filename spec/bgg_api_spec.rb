@@ -74,17 +74,15 @@ describe 'BggApi basic API calls' do
     end
 
     describe 'BGG Plays' do
-      let(:query) { {id: '84876', username: 'texasjdl'} }
+      let(:thing_id) { 84876 }
+      let(:username) { 'texasjd1' }
+      let(:query) { { id: thing_id, username: username } }
       let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
-      let(:response_file) { 'sample_data/plays?username=texasjdl&id=84876' }
+      let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><plays><play/></plays>' }
 
-      subject(:results) { BggApi.plays(query) }
+      subject(:results) { BggApi.plays username, thing_id }
 
-      it { should_not be_nil }
-
-      it 'retrieves the correct total' do
-        results['total'].should == '27'
-      end
+      it { expect( subject ).to be_instance_of Bgg::Result::Plays }
     end
 
     describe 'BGG Search' do
