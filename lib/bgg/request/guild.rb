@@ -4,7 +4,7 @@ module Bgg
 
       def initialize(id, params = {})
         if invalid_id(id)
-          raise ArgumentError.new "missing required argument"
+          raise ArgumentError.new 'missing required argument'
         else
           params[:id] = id
         end
@@ -19,11 +19,11 @@ module Bgg
       end
 
       def member_sort_date
-        member_sort('date')
+        member_sort 'date'
       end
 
       def member_sort_username
-        member_sort('username')
+        member_sort 'username'
       end
 
       private
