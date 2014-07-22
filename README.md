@@ -169,6 +169,30 @@ These might return nil if missing data or request params.  See [Working with Res
   * Integers: id (ID of theme), rank
   * String: title (Title of theme)
 
+### Guild
+
+There is no enumerable for guilds since the api can only ever return a single guild.
+
+#### Bgg::Request::Guild
+
+```ruby
+request = Bgg::Request::Guild.new( guild_id, { members: 0 } ) # Members default to true, this will turn them off
+request.page 2 # Sets member page to #2, bgg limit is 25 members per page
+request.member_sort_date # Sets member sort by date
+request.member_sort_username # Sets member sort by username (default)
+result = request.get # Execute bgg call and return result
+```
+
+#### Bgg::Result::Guild
+
+* Attributes
+  * Datetime: created
+  * Integers: id, member_count, member_page
+  * Strings: address, category, city, country, description, manager, name, postal_code, state, website
+* Methods
+  * member_usernames - array of all users on current page
+  * members - array of objects with username and date joined for all users on current page
+
 ### Hot
 
 Objects for hot items
