@@ -41,7 +41,7 @@ class BggApi
 
   NEW_METHODS.each do |method|
     define_singleton_method method do |*params|
-      request = Object.const_get("Bgg").const_get("Request").const_get(method.to_s.capitalize).new *params
+      request = Object.const_get('Bgg').const_get('Request').const_get(method.to_s.capitalize).new *params
       request.get
     end
   end
@@ -50,6 +50,7 @@ end
 
 require 'bgg/request/base'
 require 'bgg/request/collection'
+require 'bgg/request/guild'
 require 'bgg/request/hot'
 require 'bgg/request/plays'
 require 'bgg/request/search'
