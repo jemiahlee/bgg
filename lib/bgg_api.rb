@@ -72,5 +72,6 @@ require 'bgg/result/search'
 require 'bgg/result/search_item'
 require 'bgg/result/user'
 
+require 'bgg/link'
 require 'bgg/game'
 

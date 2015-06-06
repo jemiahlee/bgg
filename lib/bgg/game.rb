@@ -29,6 +29,11 @@ module Bgg
       @recommended_minimum_age = game_data['minage'][0]['value'].to_i
       @thumbnail = game_data['thumbnail'][0]
       @year_published = game_data['yearpublished'][0]['value'].to_i
+
+    end
+
+    def bgg_links
+      @bgg_links ||= Link.import_from(@game_data['link'])
     end
 
     def self.find_by_id(game_id)
