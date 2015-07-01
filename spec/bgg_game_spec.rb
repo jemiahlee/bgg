@@ -228,5 +228,15 @@ describe Bgg::Game do
         expect( burgund.families ).to match_array(['Alea Big Box', 'Country: France'])
       end
     end
+
+    describe '.bgg_links' do
+      it 'exists' do
+        expect( burgund ).to respond_to(:bgg_links)
+      end
+
+      it 'returns an array of BggLink Objects' do
+        expect( burgund.bgg_links.map(&:class).uniq ).to match_array [Bgg::Link]
+      end
+    end
   end
 end
