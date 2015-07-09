@@ -1,0 +1,2 @@
+require 'bgg_api'
+
