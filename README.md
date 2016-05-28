@@ -30,7 +30,7 @@ Then run `bundle install` from the command line:
 
 Require the gem at the top of any file you want to use.
 
-    require 'bgg'
+    require 'bgg_api'
 
 You can either use the low level basic api and then parse the XML document in a way that suits your needs,
 or you can use the specialized methods
