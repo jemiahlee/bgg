@@ -159,14 +159,14 @@ describe Bgg::Result::User do
 
     context 'plays' do
       let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><plays><play/><plays>' }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/plays' }
 
       its(:plays)      { should be_a_kind_of(Bgg::Result::Plays) }
     end
 
     context 'plays' do
       let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/collection' }
 
       its(:collection) { should be_a_kind_of(Bgg::Result::Collection) }
     end

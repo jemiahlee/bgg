@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bgg::Request::Family do
   let(:query) { {} }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/family' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/family' }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/></items>' }
 
   subject { Bgg::Request::Family.new id }

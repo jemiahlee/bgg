@@ -15,7 +15,7 @@ describe Bgg::Game do
 
       it 'creates an object for a game that exists' do
         response_file = 'sample_data/thing?id=84876&type=boardgame'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/thing'
+        request_url = 'https://www.boardgamegeek.com/xmlapi2/thing'
 
         stub_request(:any, request_url).with(query: {id: 84876, type: 'boardgame'}).to_return(body: File.open(response_file), status: 200)
         burgund = Bgg::Game.find_by_id(84876)
@@ -27,7 +27,7 @@ describe Bgg::Game do
 
       it 'throws an ArgumentError for a game that does not exist' do
         response_file = 'sample_data/thing?id=10000000&type=boardgame'
-        request_url = 'http://www.boardgamegeek.com/xmlapi2/thing'
+        request_url = 'https://www.boardgamegeek.com/xmlapi2/thing'
 
         stub_request(:any, request_url).with(query: {id: 10000000, type: 'boardgame'}).to_return(body: File.open(response_file), status: 200)
 
@@ -41,7 +41,7 @@ describe Bgg::Game do
 
     before do
       response_file = 'sample_data/thing?id=84876&type=boardgame'
-      request_url = 'http://www.boardgamegeek.com/xmlapi2/thing'
+      request_url = 'https://www.boardgamegeek.com/xmlapi2/thing'
 
       stub_request(:any, request_url).
         with(query: {id: 84876, type: 'boardgame'}).

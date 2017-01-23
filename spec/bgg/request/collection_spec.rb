@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Bgg::Request::Collection do
   let(:query) { { username: username } }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/collection' }
   let(:username) { 'abcdef' }
 
   subject { Bgg::Request::Collection.new username }

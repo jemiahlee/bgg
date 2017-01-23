@@ -10,7 +10,7 @@ describe 'BggApi basic API calls' do
   end
 
   context 'when non-200 responses' do
-    let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
+    let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/search' }
     let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
 
     before do
@@ -41,7 +41,7 @@ describe 'BggApi basic API calls' do
       let(:username) { 'texasjdl' }
       let(:params) { {own: '1', type: 'boardgame'} }
       let(:query) { params.merge({ username: username }) }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/collection' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><items><item objectid='#{item_id}'/><items>" }
 
       subject { BggApi.collection username, params }
@@ -54,7 +54,7 @@ describe 'BggApi basic API calls' do
       let(:type) { 'boardgamefamily' }
       let(:id) { 1234 }
       let(:query) { { id: id } }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/family' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/family' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><items><item type='#{type}'/></items>" }
 
       subject { BggApi.family id }
@@ -68,7 +68,7 @@ describe 'BggApi basic API calls' do
       let(:id) { 1234 }
       let(:params) { { page: 2 } }
       let(:query) { params.merge({ id: id, members: 1 }) }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/guild' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/guild' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><guild name='#{name}'></guild>" }
 
       subject { BggApi.guild id, params }
@@ -80,7 +80,7 @@ describe 'BggApi basic API calls' do
     describe 'BGG Hot Items' do
       let(:item_id) { 8 }
       let(:query) { {type: 'boardgame'} }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/hot' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><items><item id='#{item_id}'/></items>" }
 
       subject { BggApi.hot query }
@@ -94,7 +94,7 @@ describe 'BggApi basic API calls' do
       let(:thing_id) { 84876 }
       let(:username) { 'texasjd1' }
       let(:query) { { id: thing_id, username: username } }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/plays' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><plays total='#{count}'><play/></plays>" }
 
       subject(:results) { BggApi.plays username, thing_id }
@@ -108,7 +108,7 @@ describe 'BggApi basic API calls' do
       let(:search) { 'Marvel' }
       let(:params) { { query: search } }
       let(:query) { params }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/search' }
       let(:expected_response) { "<?xml version='1.0' encoding='utf-8'?><items><item id='#{item_id}'/></items>" }
 
       subject { BggApi.search search }
@@ -119,7 +119,7 @@ describe 'BggApi basic API calls' do
 
     describe 'BGG Thing' do
       let(:query) { {id: '84876', type: 'boardgame'} }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/thing' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/thing' }
       let(:response_file) { 'sample_data/thing?id=84876&type=boardgame' }
 
       subject(:results) { BggApi.thing(query) }
@@ -134,7 +134,7 @@ describe 'BggApi basic API calls' do
     describe 'BGG User' do
       let(:username) { 'texasjdl' }
       let(:query) { { name: username } }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/user' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/user' }
 
       context 'who exists' do
         let(:expected_response) { '<?xml version="1.0" encoding="utf-8"?><user id="1"></user>' }

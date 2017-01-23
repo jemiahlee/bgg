@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Bgg::Request::Plays do
   let(:query) { {} }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><plays><play/><plays>' }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/plays' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/plays' }
 
   before do
     stub_request(:any, request_url).

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bgg::Request::Hot do
   let(:with) { {} }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/hot' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/hot' }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
 
   before do
