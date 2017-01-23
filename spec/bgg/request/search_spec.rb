@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Bgg::Request::Search do
   let(:with) { { query: { query: query  } } }
   let(:query) { 'abc' }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/search' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/search' }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
 
   subject { Bgg::Request::Search.new query }

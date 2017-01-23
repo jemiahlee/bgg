@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bgg::Request::Guild do
   let(:query) { {} }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/guild' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/guild' }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><guild></guild>' }
 
   subject { Bgg::Request::Guild.new id }

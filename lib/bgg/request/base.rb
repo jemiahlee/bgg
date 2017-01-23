@@ -22,7 +22,7 @@ module Bgg
         :user
       ].freeze
 
-      BASE_URI = 'http://www.boardgamegeek.com/xmlapi2'
+      BASE_URI = 'https://www.boardgamegeek.com/xmlapi2'
 
       def initialize(method, params = {})
         raise ArgumentError.new 'unknown request method' unless METHODS.include? method

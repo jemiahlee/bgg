@@ -4,7 +4,7 @@ describe Bgg::Request::User do
   let(:query) { { name: username } }
   let(:params) { {} }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><user id="1"></user>' }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/user' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/user' }
   let(:username) { 'abcdef' }
 
   subject { Bgg::Request::User.new username, params }

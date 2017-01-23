@@ -140,7 +140,7 @@ describe Bgg::Result::Plays::Play do
     describe '#game' do
       #TODO refactor once Things have been coverted
       let(:response_file) { 'sample_data/thing?id=70512&type=boardgame' }
-      let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/thing' }
+      let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/thing' }
 
       before do
         stub_request(:any, request_url).

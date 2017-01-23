@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bgg::Request::Base do
   let(:status_code) { 200 }
-  let(:request_url) { 'http://www.boardgamegeek.com/xmlapi2/collection?' }
+  let(:request_url) { 'https://www.boardgamegeek.com/xmlapi2/collection?' }
   let(:response_body) { '<?xml version="1.0" encoding="utf-8"?><items><item/><items>' }
   let(:with) { {} }
   let(:fake_result_class) { Class.new }
